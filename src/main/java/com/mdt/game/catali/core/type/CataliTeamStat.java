@@ -23,6 +23,7 @@ public final class CataliTeamStat {
 
     // !-----------------------------------------------------------!
 
+    @Locked
     public void pushPendingExp(long amount) {
         pendingExp += amount;
     }
@@ -31,6 +32,7 @@ public final class CataliTeamStat {
 
     }
 
+    @Locked
     public ExpEarnResult earnExperience() {
         if (pendingExp <= 0) return new ExpEarnResult(0, 0);
 
@@ -61,7 +63,7 @@ public final class CataliTeamStat {
     }
 
     @Locked
-    public synchronized void useCommonUpgrade(CataliCommonUpgrade statType) {
+    public  void useCommonUpgrade(CataliCommonUpgrade statType) {
         if (commonUpgrades <= 0 || statType == null) return;
 
         commonUpgrades--;
