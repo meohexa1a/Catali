@@ -1,6 +1,10 @@
 package com.mdt.game.catali.core.type;
 
-public final class CataliTeam {
+public record CataliTeam(
+        int teamID,
+        long createAt,
 
-//
+        CataliTeamMember teamMember,
+        CataliTeamStat teamStat) {
+
 }
