@@ -1,5 +1,6 @@
 package com.mdt.game.catali.core.type;
 
+import com.mdt.game.catali.config.CataliBalanceConfig;
 import com.mdt.game.catali.core.enums.CataliCommonUpgrade;
 
 import java.util.function.Consumer;
@@ -24,7 +25,7 @@ public final class CataliTeamStat {
         if (amount <= 0) return false;
 
         var exp = (long) (amount * (level < 25 ? 4 : 1) *
-                (1 + expenrienceUpgrades * CataliConfig.EXP_MULTIPLIER));
+                (1 + expenrienceUpgrades * CataliBalanceConfig.EXP_MULTIPLIER));
         expenrience += exp;
         notify.accept(exp);
 

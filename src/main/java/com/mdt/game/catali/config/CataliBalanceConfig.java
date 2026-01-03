@@ -6,6 +6,11 @@ import mindustry.game.Team;
 
 public class CataliBalanceConfig {
 
+    public static final float HEALTH_MULTIPLIER = 0.05f;
+    public static final float DAMAGE_MULTIPLIER = 0.05f;
+    public static final int HEALING_PER_SEC = 8;
+    public static final float EXP_MULTIPLIER = 0.05f;
+
     // !-------------------------------------------!
 
     public static void onModeLoaded() {
