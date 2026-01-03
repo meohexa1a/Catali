@@ -13,11 +13,8 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class CataliBalanceConfig {
-
     // ! World Config - General
-
     public static final int CHUNK_SIZE = 50;
-
 
     // ! World Config - Unit Spawner Config
 
