@@ -79,26 +79,7 @@ public class CataliConfig {
     private static final List<StatusEffect> buffEffectWhitelist = List.of(
             fast, overdrive, overclock, shielded, boss);
 
-    public static final float BLOCK_FILL_RATE = 2.5f / 100; // 2.5%
-    public static final float MAX_SPAWN_TILES_PER_REFRESH = 50;
-    public static final int UNITS_LIMIT = 400;
-    public static final int UNIT_PER_PLAYER = 10;
-    public static final int BOSS_LIMIT = 50;
-    public static final int BOSS_PER_PLAYER = 2;
-    public static final Team BLOCK_TEAM = Team.crux;
-    public static final Team UNITS_TEAM = Team.crux;
-    public static final Team BOSS_TEAM = Team.malis;
 
-    public static final float HEALTH_MULTIPLIER = 0.05f;
-    public static final float DAMAGE_MULTIPLIER = 0.05f;
-    public static final int HEALING_PER_SEC = 15;
-    public static final float EXP_MULTIPLIER = 0.05f;
-
-    public static final int LEADER_TRANSFER_AT = 3 * 60;
-    public static final int SPAWN_SPACE_BETWEEN_PLAYER = 60;
-
-    public static final int XP_FROM_IDLE_UNIT = 40;
-    public static final List<UnitType> IDLE_UNITS = List.of(oct, quell, disrupt);
 
     // !-------------------!
 
