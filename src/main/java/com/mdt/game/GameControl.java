@@ -60,13 +60,13 @@ public class GameControl {
 
                 catali.stop();
                 sleep.start();
-                gcState = new GCState.Sleeping();
+                this.gcState = new GCState.Sleeping();
             }
 
             case GCState.RequireToWake ignored -> {
                 sleep.stop();
                 catali.start();
-                gcState = new GCState.Playing(new TimeHolder());
+                this.gcState = new GCState.Playing(new TimeHolder());
             }
 
             default -> CommonUtils.doNothing();

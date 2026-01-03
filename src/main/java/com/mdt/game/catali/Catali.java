@@ -15,11 +15,12 @@ public class Catali {
 
     @Locked
     public void start() {
-
+        this.isStarted = true;
     }
 
     @Locked
     public void stop() {
+        this.isStarted = false;
     }
 
 }

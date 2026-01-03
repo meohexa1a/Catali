@@ -30,13 +30,13 @@ public final class Sleep {
 
     @Locked
     public void start() {
-        isStarted = true;
-        isMapLoaded = false;
+        this.isStarted = true;
+        this.isMapLoaded = false;
     }
 
     @Locked
     public void stop() {
-        isStarted = false;
+        this.isStarted = false;
     }
 
     @Scheduled(cron = "*/1 * * * * *")
@@ -50,7 +50,7 @@ public final class Sleep {
 
         log.info("Loading sleep map...");
         if (loadSleepMapFromInternalPackage()) {
-            isMapLoaded = true;
+            this.isMapLoaded = true;
 
             Vars.state.rules = Vars.state.map.applyRules(Gamemode.sandbox);
             Vars.state.rules.canGameOver = false;
@@ -59,7 +59,7 @@ public final class Sleep {
 
         log.info("Cannot load fron internal package. Trying to load with fallback function...");
         if (loadSleepMapFallback()) {
-            isMapLoaded = true;
+            this.isMapLoaded = true;
 
             Vars.state.rules = Vars.state.map.applyRules(Gamemode.sandbox);
             Vars.state.rules.canGameOver = false;
