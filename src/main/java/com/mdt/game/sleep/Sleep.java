@@ -86,7 +86,7 @@ public final class Sleep {
     }
 
     private boolean loadSleepMapFallback() {
-        return MindustryWorld.loadMap(MindustryMap.getRandom())
+        return MindustryWorld.loadMap(MindustryMap.getRandomDefaultMap())
                 .onError(e -> logLoadError(e, "Failed to load sleep map"))
                 .isSuccess();
     }

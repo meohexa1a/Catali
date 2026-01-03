@@ -32,6 +32,10 @@ public class MindustryMap {
         return Vars.maps.defaultMaps().random();
     }
 
+    public static @Nonnull Map getRandomDefaultMap() {
+        return Vars.maps.defaultMaps().random();
+    }
+
     // !------------------------------------------------------------!
 
     public static Map newFromStream(@Nonnull InputStream stream) {
