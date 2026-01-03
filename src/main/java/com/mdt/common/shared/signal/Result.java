@@ -34,11 +34,27 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
+    default Result<T, F> fill(Supplier<T> supplier) {
+        return switch (this) {
+            case Success<T, F> s -> s;
+            case Empty<T, F> ignore -> new Success<>(supplier.get());
+            case Error<T, F> e -> e;
+        };
+    }
+
     default Result<T, F> recover(Function<F, T> fn) {
         return switch (this) {
             case Success<T, F> s -> s;
             case Empty<T, F> e -> e;
             case Error<T, F> err -> new Success<>(fn.apply(err.failure()));
+        };
+    }
+
+    default Result<T, F> failIfEmpty(Supplier<F> failureSupplier) {
+        return switch (this) {
+            case Success<T, F> s -> s;
+            case Empty<T, F> ignore -> new Error<>(failureSupplier.get());
+            case Error<T, F> e -> e;
         };
     }
 
@@ -50,11 +66,20 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
+
     default <U> Result<U, F> flatMap(Function<T, Result<U, F>> fn) {
         return switch (this) {
             case Success<T, F> s -> fn.apply(s.value());
             case Empty<T, F> ignore -> new Empty<>();
             case Error<T, F> e -> new Error<>(e.failure());
+        };
+    }
+
+    default Result<T, F> fillWith(Supplier<Result<T, F>> supplier) {
+        return switch (this) {
+            case Success<T, F> s -> s;
+            case Empty<T, F> ignore -> supplier.get();
+            case Error<T, F> e -> e;
         };
     }
 
@@ -76,7 +101,7 @@ public sealed interface Result<T, F extends Failure> {
 
     // !-----------------------------------------------!
 
-    default SuccessStatus<T, F> ensureSuccess(Function<F, T> fn) {
+    default SuccessStatus<T, F> ensureSuccessStatus(Function<F, T> fn) {
         return switch (this) {
             case Success<T, F> s -> s;
             case Empty<T, F> e -> e;
@@ -84,7 +109,7 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
-    default <U> Success<U, F> foldToSuccess(Function<T, U> onSuccess, Supplier<U> onEmpty, Function<F, U> onError ) {
+    default <U> Success<U, F> foldToSuccess(Function<T, U> onSuccess, Supplier<U> onEmpty, Function<F, U> onError) {
         return switch (this) {
             case Success<T, F> s -> new Success<>(onSuccess.apply(s.value()));
             case Empty<T, F> ignored -> new Success<>(onEmpty.get());
@@ -102,7 +127,7 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
-    default void handle(Consumer<T> onSuccess, Runnable onEmpty, Consumer<F> onError ) {
+    default void handle(Consumer<T> onSuccess, Runnable onEmpty, Consumer<F> onError) {
         switch (this) {
             case Success<T, F> s -> onSuccess.accept(s.value());
             case Empty<T, F> ignored -> onEmpty.run();
@@ -130,7 +155,7 @@ public sealed interface Result<T, F extends Failure> {
     // !-----------------------------------------------!
 
     sealed interface SuccessStatus<T, F extends Failure> permits Success, Empty {
-        // TODO: Map to Success & Final if nedded
+        // TODO: Map to Success & Final if needed
     }
 
     record Success<T, F extends Failure>(@Nonnull T value) implements Result<T, F>, SuccessStatus<T, F> {
