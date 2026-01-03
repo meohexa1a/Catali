@@ -1,5 +1,6 @@
 package com.mdt.game.catali;
 
+import com.mdt.game.catali.config.CataliBalanceConfig;
 import jakarta.inject.Singleton;
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,19 @@ public class Catali {
     @Locked
     public void start() {
         this.isStarted = true;
+
+        CataliBalanceConfig.onModeLoaded();
     }
 
     @Locked
     public void stop() {
         this.isStarted = false;
+
+        CataliBalanceConfig.onModeUnload();
     }
+
+    // !----------------------------------------------------!
+
+
 
 }

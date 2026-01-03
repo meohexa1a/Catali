@@ -40,6 +40,8 @@ dependencies {
     api("io.micronaut:micronaut-context")
     api("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.cache:micronaut-cache-caffeine")
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 micronaut {
