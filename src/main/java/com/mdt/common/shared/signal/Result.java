@@ -8,6 +8,12 @@ import java.util.function.Supplier;
 
 public sealed interface Result<T, F extends Failure> {
 
+    default boolean isSuccess() {
+        return true;
+    }
+
+    // !----------------------------------------------!
+
     static <T, F extends Failure> Result<T, F> success(@Nonnull T value) {
         return new Success<>(value);
     }
@@ -34,7 +40,7 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
-    default Result<T, F> fill(Supplier<T> supplier) {
+    default Result<T, F> provide(Supplier<T> supplier) {
         return switch (this) {
             case Success<T, F> s -> s;
             case Empty<T, F> ignore -> new Success<>(supplier.get());
@@ -75,7 +81,7 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
-    default Result<T, F> fillWith(Supplier<Result<T, F>> supplier) {
+    default Result<T, F> provideWith(Supplier<Result<T, F>> supplier) {
         return switch (this) {
             case Success<T, F> s -> s;
             case Empty<T, F> ignore -> supplier.get();
@@ -168,5 +174,9 @@ public sealed interface Result<T, F extends Failure> {
 
     record Error<T, F extends Failure>(@Nonnull F failure) implements Result<T, F> {
 
+        @Override
+        public boolean isSuccess() {
+            return false;
+        }
     }
 }
