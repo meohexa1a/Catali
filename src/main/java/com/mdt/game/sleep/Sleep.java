@@ -3,6 +3,7 @@ package com.mdt.game.sleep;
 import arc.Core;
 import arc.files.Fi;
 import com.mdt.MintyMDTPlugin;
+import com.mdt.common.shared.utils.CommonUtils;
 import com.mdt.mindustry.utils.MindustryMap;
 import com.mdt.mindustry.utils.MindustryWorld;
 import com.mdt.mindustry.utils.exception.WorldLoadException;
@@ -23,20 +24,35 @@ import java.nio.file.Files;
 public final class Sleep {
     private static final String SLEEP_MAP = "maps/sleep.msav";
 
-    private boolean isStarted = false;
-    private boolean isMapLoaded = false;
+    // !------------------------------------------------!
+
+    private enum SleepState {
+        INACTIVE,
+        NOT_LOADED,
+        LOADED;
+    }
+
+    private SleepState sleepState = SleepState.INACTIVE;
 
     // !------------------------------------------------!
 
     @Locked
     public void start() {
-        this.isStarted = true;
-        this.isMapLoaded = false;
+        this.sleepState = SleepState.NOT_LOADED;
     }
 
     @Locked
     public void stop() {
-        this.isStarted = false;
+        switch (sleepState) {
+            case INACTIVE -> CommonUtils.doNothing();
+
+            case NOT_LOADED -> this.sleepState = SleepState.INACTIVE;
+            case LOADED -> {
+                Vars.logic.reset();
+
+                this.sleepState = SleepState.INACTIVE;
+            }
+        }
     }
 
     @Scheduled(cron = "*/1 * * * * *")
@@ -46,23 +62,23 @@ public final class Sleep {
 
     @Locked
     private void _refresh() {
-        if (!isStarted || isMapLoaded) return;
+        if (sleepState != SleepState.NOT_LOADED) return;
 
         log.info("Loading sleep map...");
         if (loadSleepMapFromInternalPackage()) {
-            this.isMapLoaded = true;
-
             Vars.state.rules = Vars.state.map.applyRules(Gamemode.sandbox);
             Vars.state.rules.canGameOver = false;
+
+            this.sleepState = SleepState.LOADED;
             return;
         }
 
         log.info("Cannot load fron internal package. Trying to load with fallback function...");
         if (loadSleepMapFallback()) {
-            this.isMapLoaded = true;
-
             Vars.state.rules = Vars.state.map.applyRules(Gamemode.sandbox);
             Vars.state.rules.canGameOver = false;
+
+            this.sleepState = SleepState.LOADED;
         }
     }
 
@@ -89,8 +105,6 @@ public final class Sleep {
                 .onError(e -> logLoadError(e, "Failed to load sleep map"))
                 .isSuccess();
     }
-
-    // !------------------------------------------------!
 
     private void logLoadError(WorldLoadException exception, String messagePrefix) {
         switch (exception) {

@@ -17,33 +17,35 @@ import mindustry.gen.Groups;
 @Singleton
 @RequiredArgsConstructor
 public class GameControl {
-    private static final long WORLD_IDLE_TIMEOUT  = 3 * 60 * 1000;
+    private static final long WORLD_IDLE_TIMEOUT = 3 * 60 * 1000;
 
     private final Sleep sleep;
     private final Catali catali;
 
-    public sealed interface GCState {
+    // !---------------------------------------------------!
+
+    private sealed interface GCState {
 
         record Playing(TimeHolder lastLeaveHolder) implements GCState {
 
         }
 
-        record Sleeping() implements GCState {
-
+        final class Sleeping implements GCState {
+            public static final Sleeping INSTANCE = new Sleeping();
         }
 
-        record RequireToWake() implements GCState {
-
+        final class RequireToWake implements GCState {
+            public static final RequireToWake INSTANCE = new RequireToWake();
         }
     }
 
-    private GCState gcState = new GCState.Playing(new TimeHolder());
+    private GCState gcState = GCState.Sleeping.INSTANCE;
 
     // !---------------------------------------------------!
 
     @PostConstruct
     public void init() {
-        Core.app.post(catali::start);
+        sleep.start();
     }
 
     @Scheduled(cron = "*/1 * * * * *")
@@ -60,7 +62,7 @@ public class GameControl {
 
                 catali.stop();
                 sleep.start();
-                this.gcState = new GCState.Sleeping();
+                this.gcState = GCState.Sleeping.INSTANCE;
             }
 
             case GCState.RequireToWake ignored -> {
@@ -78,7 +80,7 @@ public class GameControl {
     public void listen(EventType.PlayerJoin ignore) {
         switch (gcState) {
             case GCState.Playing playing -> playing.lastLeaveHolder().release();
-            case GCState.Sleeping ignored -> this.gcState = new GCState.RequireToWake();
+            case GCState.Sleeping ignored -> this.gcState = GCState.RequireToWake.INSTANCE;
 
             default -> CommonUtils.doNothing();
         }

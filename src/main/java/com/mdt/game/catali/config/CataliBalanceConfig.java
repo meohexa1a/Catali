@@ -9,17 +9,15 @@ import java.util.List;
 
 import static mindustry.content.UnitTypes.*;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class CataliBalanceConfig {
 
     // ! World Config - General
 
     public static final int CHUNK_SIZE = 50;
 
-    // ! World Config - Block Spawner Config
-
-    public static final Team BLOCK_TEAM = Team.crux;
-    public static final float BLOCK_FILL_RATE = 2.5f / 100; // 2.5%
-    public static final float MAX_BLOCK_SPAWNED_PER_REFRESH = 50;
 
     // ! World Config - Unit Spawner Config
 

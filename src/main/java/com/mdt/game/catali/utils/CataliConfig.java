@@ -30,7 +30,6 @@ import mindustry.type.UnitType;
 @UtilityClass
 public class CataliConfig {
     private static final Map<Block, Integer> blocksToExperience = new HashMap<>();
-    private static final List<Block> weightedBlocks = new ArrayList<>();
 
     private static final Map<UnitType, Integer> unitCatchChances = new HashMap<>();
     private static final Map<UnitType, Set<UnitType>> unitEvolutions = new HashMap<>();
@@ -111,36 +110,6 @@ public class CataliConfig {
 
         // !--------------------------!
 
-        Map<Block, Integer> blocksToSpawnChance = new HashMap<>();
-        blocksToSpawnChance.put(copperWall, 200);
-        blocksToSpawnChance.put(copperWallLarge, 50);
-        blocksToSpawnChance.put(titaniumWall, 100);
-        blocksToSpawnChance.put(titaniumWallLarge, 20);
-        blocksToSpawnChance.put(berylliumWall, 67);
-        blocksToSpawnChance.put(berylliumWallLarge, 13);
-        blocksToSpawnChance.put(plastaniumWall, 57);
-        blocksToSpawnChance.put(plastaniumWallLarge, 11);
-        blocksToSpawnChance.put(tungstenWall, 50);
-        blocksToSpawnChance.put(tungstenWallLarge, 10);
-        blocksToSpawnChance.put(thoriumWall, 50);
-        blocksToSpawnChance.put(thoriumWallLarge, 9);
-        blocksToSpawnChance.put(phaseWall, 40);
-        blocksToSpawnChance.put(phaseWallLarge, 8);
-        blocksToSpawnChance.put(surgeWall, 25);
-        blocksToSpawnChance.put(surgeWallLarge, 5);
-        blocksToSpawnChance.put(carbideWall, 20);
-        blocksToSpawnChance.put(carbideWallLarge, 4);
-        blocksToSpawnChance.put(reinforcedSurgeWall, 17);
-        blocksToSpawnChance.put(reinforcedSurgeWallLarge, 3);
-        blocksToSpawnChance.put(container, 10);
-        blocksToSpawnChance.put(vault, 4);
-        blocksToSpawnChance.put(reinforcedContainer, 4);
-        blocksToSpawnChance.put(reinforcedVault, 1);
-        blocksToSpawnChance.put(thoriumReactor, 1);
-
-        for (Map.Entry<Block, Integer> entry : blocksToSpawnChance.entrySet())
-            weightedBlocks.addAll(Collections.nCopies(entry.getValue(), entry.getKey()));
-        Collections.shuffle(weightedBlocks);
 
         // !--------------------------!
 
@@ -409,9 +378,6 @@ public class CataliConfig {
         return blocksToExperience.getOrDefault(block, 0);
     }
 
-    public static Block getRandomBlockToSpawn() {
-        return weightedBlocks.get(ThreadLocalRandom.current().nextInt(weightedBlocks.size()));
-    }
 
     public static List<UnitType> getRandomUnitGroup() {
         return weightedUnits.isEmpty()
