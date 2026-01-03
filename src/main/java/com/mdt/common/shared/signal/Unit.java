@@ -9,7 +9,7 @@ package com.mdt.common.shared.signal;
  *
  * <h3>Why use Unit over Boolean?</h3>
  * <ul>
- * <li><b>Definite State:</b> A {@link Boolean} object can represent three states:
+ * <li><b>Definite GCState:</b> A {@link Boolean} object can represent three states:
  * {@code true}, {@code false}, or {@code null}. {@code Unit} simplifies this by
  * representing a binary outcome: {@link #INSTANCE} (Success/Present) or {@code null} (Failure/Absent).</li>
  * <li><b>Intent:</b> It explicitly communicates that the <i>value</i> of the result

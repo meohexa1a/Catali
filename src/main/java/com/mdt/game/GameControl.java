@@ -2,6 +2,7 @@ package com.mdt.game;
 
 import arc.Core;
 import com.mdt.common.shared.type.TimeHolder;
+import com.mdt.common.shared.utils.CommonUtils;
 import com.mdt.game.catali.Catali;
 import com.mdt.game.sleep.Sleep;
 import io.micronaut.runtime.event.annotation.EventListener;
@@ -16,14 +17,27 @@ import mindustry.gen.Groups;
 @Singleton
 @RequiredArgsConstructor
 public class GameControl {
-    private static final long UNNAMED = 3 * 60 * 1000;
+    private static final long WORLD_IDLE_TIMEOUT  = 3 * 60 * 1000;
 
     private final Sleep sleep;
     private final Catali catali;
 
-    private boolean isSleep = false;
-    private boolean requireWake = false;
-    private final TimeHolder lastLeaveHolder = new TimeHolder();
+    public sealed interface GCState {
+
+        record Playing(TimeHolder lastLeaveHolder) implements GCState {
+
+        }
+
+        record Sleeping() implements GCState {
+
+        }
+
+        record RequireToWake() implements GCState {
+
+        }
+    }
+
+    private GCState gcState = new GCState.Playing(new TimeHolder());
 
     // !---------------------------------------------------!
 
@@ -39,34 +53,41 @@ public class GameControl {
 
     @Locked
     private void _refresh() {
-        if (!isSleep) {
-            if (!lastLeaveHolder.isHolding() || !lastLeaveHolder.isOver(UNNAMED)) return;
+        switch (gcState) {
+            case GCState.Playing playing -> {
+                var holder = playing.lastLeaveHolder();
+                if (!holder.isHolding() || !holder.isOver(WORLD_IDLE_TIMEOUT)) return;
 
-            lastLeaveHolder.release();
-            catali.stop();
-            sleep.start();
-            isSleep = true;
-            requireWake = false;
-        } else {
-            if (!requireWake) return;
+                catali.stop();
+                sleep.start();
+                gcState = new GCState.Sleeping();
+            }
 
-            sleep.stop();
-            catali.start();
-            isSleep = false;
-            requireWake = false;
+            case GCState.RequireToWake ignored -> {
+                sleep.stop();
+                catali.start();
+                gcState = new GCState.Playing(new TimeHolder());
+            }
+
+            default -> CommonUtils.doNothing();
         }
     }
 
     @Locked
     @EventListener
     public void listen(EventType.PlayerJoin ignore) {
-        if (isSleep) this.requireWake = true;
-        else lastLeaveHolder.release();
+        switch (gcState) {
+            case GCState.Playing playing -> playing.lastLeaveHolder().release();
+            case GCState.Sleeping ignored -> this.gcState = new GCState.RequireToWake();
+
+            default -> CommonUtils.doNothing();
+        }
     }
 
     @Locked
     @EventListener
     public void listen(EventType.PlayerLeave ignore) {
-        if (!isSleep && Groups.player.isEmpty()) lastLeaveHolder.hold();
+        if (gcState instanceof GCState.Playing(var lastLeaveHolder) && Groups.player.isEmpty())
+            lastLeaveHolder.hold();
     }
 }
