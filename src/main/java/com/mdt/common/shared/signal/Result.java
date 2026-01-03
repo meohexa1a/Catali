@@ -84,29 +84,29 @@ public sealed interface Result<T, F extends Failure> {
         };
     }
 
-    default <U> Success<U, F> foldToSuccess(Function<T, U> onSuccess, Function<F, U> onError, Supplier<U> onEmpty) {
+    default <U> Success<U, F> foldToSuccess(Function<T, U> onSuccess, Supplier<U> onEmpty, Function<F, U> onError ) {
         return switch (this) {
             case Success<T, F> s -> new Success<>(onSuccess.apply(s.value()));
-            case Error<T, F> e -> new Success<>(onError.apply(e.failure()));
             case Empty<T, F> ignored -> new Success<>(onEmpty.get());
+            case Error<T, F> e -> new Success<>(onError.apply(e.failure()));
         };
     }
 
     // !-----------------------------------------------!
 
-    default <R> R fold(Function<T, R> onSuccess, Function<F, R> onError, Supplier<R> onEmpty) {
+    default <R> R fold(Function<T, R> onSuccess, Supplier<R> onEmpty, Function<F, R> onError) {
         return switch (this) {
             case Success<T, F> s -> onSuccess.apply(s.value());
-            case Error<T, F> e -> onError.apply(e.failure());
             case Empty<T, F> ignored -> onEmpty.get();
+            case Error<T, F> e -> onError.apply(e.failure());
         };
     }
 
-    default void handle(Runnable onSuccess, Runnable onError, Runnable onEmpty) {
+    default void handle(Consumer<T> onSuccess, Runnable onEmpty, Consumer<F> onError ) {
         switch (this) {
-            case Success<T, F> ignored -> onSuccess.run();
-            case Error<T, F> ignored -> onError.run();
+            case Success<T, F> s -> onSuccess.accept(s.value());
             case Empty<T, F> ignored -> onEmpty.run();
+            case Error<T, F> e -> onError.accept(e.failure());
         }
     }
 
