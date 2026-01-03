@@ -11,6 +11,9 @@ public class CataliBalanceConfig {
     public static final int HEALING_PER_SEC = 8;
     public static final float EXP_MULTIPLIER = 0.05f;
 
+    public static final int BEGINNER_LEVEL_LEAST_THAN = 25;
+    public static final int BEGINNER_EXP_MULTIPLIER = 4;
+
     // !-------------------------------------------!
 
     public static void onModeLoaded() {

@@ -36,9 +36,12 @@ public final class CataliTeamStat {
     public ExpEarnResult earnExperience() {
         if (pendingExp <= 0) return new ExpEarnResult(0, 0);
 
-        var exp = (long) (pendingExp * (level < 25 ? 4 : 1) *
-                (1 + experienceUpgrades * CataliBalanceConfig.EXP_MULTIPLIER));
+        var exp = (long) (pendingExp
+                * (level < CataliBalanceConfig.BEGINNER_LEVEL_LEAST_THAN ? CataliBalanceConfig.BEGINNER_EXP_MULTIPLIER : 1)
+                * (1 + experienceUpgrades * CataliBalanceConfig.EXP_MULTIPLIER));
         experience += exp;
+
+        pendingExp = 0;
         if (experience < required) return new ExpEarnResult(exp, 0);
 
         int levelUp = 0;
@@ -53,7 +56,6 @@ public final class CataliTeamStat {
             else commonUpgrades++;
         }
 
-        pendingExp = 0;
         return new ExpEarnResult(exp, levelUp);
     }
 
@@ -63,7 +65,7 @@ public final class CataliTeamStat {
     }
 
     @Locked
-    public  void useCommonUpgrade(CataliCommonUpgrade statType) {
+    public void useCommonUpgrade(CataliCommonUpgrade statType) {
         if (commonUpgrades <= 0 || statType == null) return;
 
         commonUpgrades--;
