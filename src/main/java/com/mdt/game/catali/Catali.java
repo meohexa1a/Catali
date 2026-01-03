@@ -41,6 +41,7 @@ public class Catali {
 
             case NOT_LOADED -> this.cataliState = CataliState.INACTIVE;
             case LOADED -> {
+                unload();
                 Vars.logic.reset();
 
                 this.cataliState = CataliState.INACTIVE;
@@ -59,7 +60,28 @@ public class Catali {
 
     @Locked
     private void _refresh() {
+        switch (cataliState) {
+            case INACTIVE -> CommonUtils.doNothing();
+            case NOT_LOADED -> load();
+            case LOADED -> __refresh();
+        }
     }
+
+    @Locked
+    private void load() {
+
+    }
+
+    @Locked
+    private void unload() {
+
+    }
+
+    @Locked
+    private void __refresh() {
+
+    }
+
 
 
 }
