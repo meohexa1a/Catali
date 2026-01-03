@@ -24,20 +24,19 @@ public final class Sleep {
     private static final String SLEEP_MAP = "maps/sleep.msav";
 
     private boolean isStarted = false;
-    private boolean isLoadedMap = false;
+    private boolean isMapLoaded = false;
 
     // !------------------------------------------------!
 
     @Locked
     public void start() {
         isStarted = true;
-        isLoadedMap = false;
+        isMapLoaded = false;
     }
 
     @Locked
     public void stop() {
         isStarted = false;
-        isLoadedMap = false;
     }
 
     @Scheduled(cron = "*/1 * * * * *")
@@ -47,11 +46,11 @@ public final class Sleep {
 
     @Locked
     private void _refresh() {
-        if (!isStarted || isLoadedMap) return;
+        if (!isStarted || isMapLoaded) return;
 
         log.info("Loading sleep map...");
         if (loadSleepMapFromInternalPackage()) {
-            isLoadedMap = true;
+            isMapLoaded = true;
 
             Vars.state.rules = Vars.state.map.applyRules(Gamemode.sandbox);
             Vars.state.rules.canGameOver = false;
@@ -60,7 +59,7 @@ public final class Sleep {
 
         log.info("Cannot load fron internal package. Trying to load with fallback function...");
         if (loadSleepMapFallback()) {
-            isLoadedMap = true;
+            isMapLoaded = true;
 
             Vars.state.rules = Vars.state.map.applyRules(Gamemode.sandbox);
             Vars.state.rules.canGameOver = false;

@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 @RequiredArgsConstructor
 public class Catali {
-
+    private boolean isStarted = false;
 
     // !----------------------------------------------------!
 
