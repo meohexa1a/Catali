@@ -2,58 +2,65 @@ package com.mdt.game.catali.core.type;
 
 import com.mdt.game.catali.config.CataliBalanceConfig;
 import com.mdt.game.catali.core.enums.CataliCommonUpgrade;
+import lombok.Getter;
+import lombok.Locked;
 
-import java.util.function.Consumer;
-
+@Getter(onMethod_ = @Locked)
 public final class CataliTeamStat {
-
     private int level = 1;
-    private long expenrience = 0;
+    private long experience = 0;
     private long required = 20;
 
     private int healthUpgrades;
     private int damageUpgrades;
     private int healingUpgrades;
-    private int expenrienceUpgrades;
+    private int experienceUpgrades;
 
     private int commonUpgrades;
     private int rareUpgrades;
 
-    // -------------------------------------------------------------
+    private long pendingExp = 0;
 
-    public synchronized boolean earnExperience(long amount, Consumer<Long> notify) {
-        if (amount <= 0) return false;
+    // !-----------------------------------------------------------!
 
-        var exp = (long) (amount * (level < 25 ? 4 : 1) *
-                (1 + expenrienceUpgrades * CataliBalanceConfig.EXP_MULTIPLIER));
-        expenrience += exp;
-        notify.accept(exp);
+    public void pushPendingExp(long amount) {
+        pendingExp += amount;
+    }
 
-        if (expenrience < required)
-            return false;
+    public record ExpEarnResult(long gainedExp, int levelUp) {
 
-        while (expenrience >= required) {
-            expenrience -= required;
+    }
+
+    public ExpEarnResult earnExperience() {
+        if (pendingExp <= 0) return new ExpEarnResult(0, 0);
+
+        var exp = (long) (pendingExp * (level < 25 ? 4 : 1) *
+                (1 + experienceUpgrades * CataliBalanceConfig.EXP_MULTIPLIER));
+        experience += exp;
+        if (experience < required) return new ExpEarnResult(exp, 0);
+
+        int levelUp = 0;
+        while (experience >= required) {
+            experience -= required;
             level++;
+            levelUp++;
             required += getNextRequired();
 
-            if (level % 5 == 0)
-                rareUpgrades++;
-            else
-                commonUpgrades++;
-
-            if (level % 20 == 0)
-                rareUpgrades++;
+            if (level % 20 == 0) rareUpgrades++;
+            if (level % 5 == 0) rareUpgrades++;
+            else commonUpgrades++;
         }
 
-        return true;
+        pendingExp = 0;
+        return new ExpEarnResult(exp, levelUp);
     }
 
+    @Locked
     public void useCommonUpgrade(CataliCommonUpgrade statType, int amount) {
-        for (int i = 0; i < amount; i++)
-            useCommonUpgrade(statType);
+        for (int i = 0; i < amount; i++) useCommonUpgrade(statType);
     }
 
+    @Locked
     public synchronized void useCommonUpgrade(CataliCommonUpgrade statType) {
         if (commonUpgrades <= 0 || statType == null) return;
 
@@ -62,15 +69,16 @@ public final class CataliTeamStat {
             case HEALTH -> healthUpgrades++;
             case DAMAGE -> damageUpgrades++;
             case HEALING -> healingUpgrades++;
-            case EXPERIENCE -> expenrienceUpgrades++;
+            case EXPERIENCE -> experienceUpgrades++;
         }
     }
 
+    @Locked
     public void useRareUpgrade() {
         rareUpgrades--;
     }
 
-    // !-----------------------------!
+    // !----------------------------------------!
 
     private long getNextRequired() {
         return switch ((level - 1) / 25) {
