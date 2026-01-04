@@ -8,9 +8,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static mindustry.content.UnitTypes.*;
-import static mindustry.content.UnitTypes.collaris;
-import static mindustry.content.UnitTypes.navanax;
-import static mindustry.content.UnitTypes.oct;
 
 @UtilityClass
 public class CataliEnemySpawnerConfig {

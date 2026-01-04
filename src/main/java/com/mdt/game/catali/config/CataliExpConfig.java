@@ -8,29 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static mindustry.content.Blocks.*;
-import static mindustry.content.Blocks.berylliumWall;
-import static mindustry.content.Blocks.berylliumWallLarge;
-import static mindustry.content.Blocks.carbideWall;
-import static mindustry.content.Blocks.carbideWallLarge;
-import static mindustry.content.Blocks.container;
-import static mindustry.content.Blocks.phaseWall;
-import static mindustry.content.Blocks.phaseWallLarge;
-import static mindustry.content.Blocks.plastaniumWall;
-import static mindustry.content.Blocks.plastaniumWallLarge;
-import static mindustry.content.Blocks.reinforcedContainer;
-import static mindustry.content.Blocks.reinforcedSurgeWall;
-import static mindustry.content.Blocks.reinforcedSurgeWallLarge;
-import static mindustry.content.Blocks.reinforcedVault;
-import static mindustry.content.Blocks.surgeWall;
-import static mindustry.content.Blocks.surgeWallLarge;
-import static mindustry.content.Blocks.thoriumWall;
-import static mindustry.content.Blocks.thoriumWallLarge;
-import static mindustry.content.Blocks.titaniumWallLarge;
-import static mindustry.content.Blocks.tungstenWall;
-import static mindustry.content.Blocks.tungstenWallLarge;
-import static mindustry.content.Blocks.vault;
 import static mindustry.content.UnitTypes.*;
-import static mindustry.content.UnitTypes.disrupt;
 
 @UtilityClass
 public class CataliExpConfig {
