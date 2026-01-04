@@ -16,17 +16,7 @@ public class CataliBalanceConfig {
     // ! World Config - General
     public static final int CHUNK_SIZE = 50;
 
-    // ! World Config - Unit Spawner Config
-
-    public static final Team ENEMY_TEAM = Team.crux;
-    public static final Team BOSS_TEAM = Team.crux;
-    public static final int ENEMY_LIMIT = 400;
-    public static final int ENEMY_PER_PLAYER = 15;
-    public static final int BOSS_LIMIT = 50;
-    public static final int BOSS_PER_PLAYER = 2;
-
     // ! Team Config
-
     public static final float HEALTH_MULTIPLIER = 0.05f;
     public static final float DAMAGE_MULTIPLIER = 0.05f;
     public static final int HEALING_PER_SEC = 8;
