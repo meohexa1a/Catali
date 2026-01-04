@@ -6,22 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 import arc.struct.Seq;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
-import static mindustry.content.Blocks.*;
 import static mindustry.content.UnitTypes.*;
 import static mindustry.content.StatusEffects.*;
 
-import mindustry.world.Block;
-import mindustry.Vars;
-import mindustry.content.Items;
-import mindustry.content.UnitTypes;
-import mindustry.entities.abilities.UnitSpawnAbility;
-import mindustry.game.Team;
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
 import mindustry.type.UnitType;
@@ -29,31 +21,11 @@ import mindustry.type.UnitType;
 @Getter
 @UtilityClass
 public class CataliConfig {
-    private static final Map<Block, Integer> blocksToExperience = new HashMap<>();
 
     private static final Map<UnitType, Integer> unitCatchChances = new HashMap<>();
     private static final Map<UnitType, Set<UnitType>> unitEvolutions = new HashMap<>();
     private static final Map<UnitType, Integer> unitRespawnTimes = new HashMap<>();
 
-    private static final Map<UnitType, Integer> unitsToExperience = new HashMap<>();
-
-    private static final List<String> rankingEmoji = List.of(
-            Items.copper.emoji(),
-            Items.lead.emoji(),
-            Items.graphite.emoji(),
-            Items.metaglass.emoji(),
-            Items.silicon.emoji(),
-            Items.titanium.emoji(),
-            Items.beryllium.emoji(),
-            Items.tungsten.emoji(),
-            Items.plastanium.emoji(),
-            Items.oxide.emoji(),
-            Items.thorium.emoji(),
-            Items.carbide.emoji(),
-            Items.phaseFabric.emoji(),
-            Items.surgeAlloy.emoji(),
-            Items.pyratite.emoji(),
-            Items.blastCompound.emoji());
 
     private static final List<UnitType> catchWhitelist = List.of(
             dagger, mace, fortress, reign,
@@ -81,80 +53,6 @@ public class CataliConfig {
     // !-------------------!
 
     static {
-        blocksToExperience.put(copperWall, 32);
-        blocksToExperience.put(copperWallLarge, 128);
-        blocksToExperience.put(titaniumWall, 44);
-        blocksToExperience.put(titaniumWallLarge, 176);
-        blocksToExperience.put(berylliumWall, 52);
-        blocksToExperience.put(berylliumWallLarge, 208);
-        blocksToExperience.put(plastaniumWall, 52);
-        blocksToExperience.put(plastaniumWallLarge, 208);
-        blocksToExperience.put(tungstenWall, 72);
-        blocksToExperience.put(tungstenWallLarge, 288);
-        blocksToExperience.put(thoriumWall, 80);
-        blocksToExperience.put(thoriumWallLarge, 320);
-        blocksToExperience.put(phaseWall, 60);
-        blocksToExperience.put(phaseWallLarge, 240);
-        blocksToExperience.put(surgeWall, 92);
-        blocksToExperience.put(surgeWallLarge, 368);
-        blocksToExperience.put(carbideWall, 108);
-        blocksToExperience.put(carbideWallLarge, 432);
-        blocksToExperience.put(reinforcedSurgeWall, 100);
-        blocksToExperience.put(reinforcedSurgeWallLarge, 400);
-        blocksToExperience.put(container, 75);
-        blocksToExperience.put(vault, 225);
-        blocksToExperience.put(reinforcedContainer, 250);
-        blocksToExperience.put(reinforcedVault, 750);
-
-        // !--------------------------!
-
-
-        // !--------------------------!
-
-        unitsToExperience.put(dagger, 30);
-        unitsToExperience.put(nova, 24);
-        unitsToExperience.put(flare, 14);
-        unitsToExperience.put(poly, 80);
-        unitsToExperience.put(mace, 110);
-        unitsToExperience.put(pulsar, 64);
-        unitsToExperience.put(horizon, 68);
-        unitsToExperience.put(mega, 92);
-        unitsToExperience.put(risso, 60);
-        unitsToExperience.put(retusa, 54);
-        unitsToExperience.put(stell, 170);
-        unitsToExperience.put(merui, 136);
-        unitsToExperience.put(elude, 120);
-        unitsToExperience.put(fortress, 180);
-        unitsToExperience.put(quasar, 128);
-        unitsToExperience.put(zenith, 140);
-        unitsToExperience.put(quad, 1200);
-        unitsToExperience.put(minke, 120);
-        unitsToExperience.put(oxynoe, 112);
-        unitsToExperience.put(locus, 420);
-        unitsToExperience.put(cleroi, 220);
-        unitsToExperience.put(avert, 220);
-        unitsToExperience.put(scepter, 1800);
-        unitsToExperience.put(vela, 1640);
-        unitsToExperience.put(antumbra, 1440);
-        unitsToExperience.put(oct, 3000);
-        unitsToExperience.put(bryde, 182);
-        unitsToExperience.put(cyerce, 174);
-        unitsToExperience.put(precept, 1000);
-        unitsToExperience.put(anthicus, 580);
-        unitsToExperience.put(obviate, 460);
-        unitsToExperience.put(reign, 4000);
-        unitsToExperience.put(corvus, 3000);
-        unitsToExperience.put(eclipse, 4000);
-        unitsToExperience.put(sei, 2000);
-        unitsToExperience.put(aegires, 2200);
-        unitsToExperience.put(vanquish, 2200);
-        unitsToExperience.put(tecta, 1460);
-        unitsToExperience.put(quell, 1200);
-        unitsToExperience.put(omura, 4400);
-        unitsToExperience.put(navanax, 4000);
-        unitsToExperience.put(conquer, 4400);
-        unitsToExperience.put(collaris, 3600);
-        unitsToExperience.put(disrupt, 2400);
 
         // !--------------------------!
 
@@ -299,43 +197,9 @@ public class CataliConfig {
         unitCatchChances.put(collaris, 5);
         unitCatchChances.put(disrupt, 15);
 
-        // !---------------------------!
-
-
-
-        // !--------------------------!
-
-        Map<List<UnitType>, Integer> bossSpawnChances = new HashMap<>();
-
-        bossSpawnChances.put(List.of(collaris, collaris, navanax, oct, oct, oct, vela, vela), 1);
-
-        for (Map.Entry<List<UnitType>, Integer> e : bossSpawnChances.entrySet())
-            weightedBoss.addAll(Collections.nCopies(e.getValue(), e.getKey()));
-        Collections.shuffle(weightedBoss);
     }
 
     // !--------------------------!
-
-    public static int getExperienceForBlock(Block block) {
-        return blocksToExperience.getOrDefault(block, 0);
-    }
-
-
-    public static List<UnitType> getRandomUnitGroup() {
-        return weightedUnits.isEmpty()
-                ? Collections.emptyList()
-                : weightedUnits.get(ThreadLocalRandom.current().nextInt(weightedUnits.size()));
-    }
-
-    public static List<UnitType> getRandomBossGroup() {
-        return weightedBoss.isEmpty()
-                ? Collections.emptyList()
-                : weightedBoss.get(ThreadLocalRandom.current().nextInt(weightedBoss.size()));
-    }
-
-    public static int getExperienceForUnit(UnitType unit) {
-        return unitsToExperience.getOrDefault(unit, 0);
-    }
 
     public static Set<UnitType> getUnitEvolutions(UnitType unit) {
         return unitEvolutions.getOrDefault(unit, Collections.emptySet());
@@ -349,10 +213,6 @@ public class CataliConfig {
         return unitCatchChances.getOrDefault(unit, 0);
     }
 
-    public String getRankEmoji(long level) {
-        return rankingEmoji.get(Math.min((int) level / 10, rankingEmoji.size() - 1));
-    }
-
     public boolean canCatchUnit(UnitType type) {
         return catchWhitelist.contains(type);
     }
@@ -364,7 +224,7 @@ public class CataliConfig {
     public List<StatusEffect> selectBuffsCanBeApplied(Unit u) {
         var buffs = new ArrayList<>(buffEffectWhitelist);
 
-        buffs.removeIf(buff -> u.hasEffect(buff));
+        buffs.removeIf(u::hasEffect);
         return buffs;
     }
 }

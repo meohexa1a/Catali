@@ -1,6 +1,7 @@
 package com.mdt.game.catali.config;
 
 import mindustry.Vars;
+import mindustry.content.Items;
 import mindustry.content.UnitTypes;
 import mindustry.game.Team;
 import mindustry.type.UnitType;
@@ -12,7 +13,7 @@ import static mindustry.content.UnitTypes.*;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class CataliBalanceConfig {
+public class CataliGeneralConfig {
     // ! World Config - General
     public static final int CHUNK_SIZE = 50;
 
@@ -27,6 +28,30 @@ public class CataliBalanceConfig {
 
     public static final int EXP_FROM_IDLE_UNIT_PER_REFRESH = 40;
     public static final List<UnitType> IDLE_UNITS = List.of(oct, quell, disrupt);
+
+    private static final List<String> RANKING_EMOJI = List.of(
+            Items.copper.emoji(),
+            Items.lead.emoji(),
+            Items.graphite.emoji(),
+            Items.metaglass.emoji(),
+            Items.silicon.emoji(),
+            Items.titanium.emoji(),
+            Items.beryllium.emoji(),
+            Items.tungsten.emoji(),
+            Items.plastanium.emoji(),
+            Items.oxide.emoji(),
+            Items.thorium.emoji(),
+            Items.carbide.emoji(),
+            Items.phaseFabric.emoji(),
+            Items.surgeAlloy.emoji(),
+            Items.pyratite.emoji(),
+            Items.blastCompound.emoji());
+
+    // !-------------------------------------------!
+
+    public static String getRankEmoji(long level) {
+        return RANKING_EMOJI.get(Math.min(Math.max((int) level / 10, 0), RANKING_EMOJI.size() - 1));
+    }
 
     // !-------------------------------------------!
 

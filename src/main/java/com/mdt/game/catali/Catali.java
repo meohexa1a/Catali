@@ -2,7 +2,7 @@ package com.mdt.game.catali;
 
 import arc.Core;
 import com.mdt.common.shared.utils.CommonUtils;
-import com.mdt.game.catali.config.CataliBalanceConfig;
+import com.mdt.game.catali.config.CataliGeneralConfig;
 import io.micronaut.scheduling.annotation.Scheduled;
 import jakarta.inject.Singleton;
 import lombok.Locked;
@@ -31,7 +31,7 @@ public class Catali {
     public void start() {
         this.cataliState = CataliState.NOT_LOADED;
 
-        CataliBalanceConfig.onModeLoaded();
+        CataliGeneralConfig.onModeLoaded();
     }
 
     @Locked
@@ -48,7 +48,7 @@ public class Catali {
             }
         }
 
-        CataliBalanceConfig.onModeUnload();
+        CataliGeneralConfig.onModeUnload();
     }
 
     // !----------------------------------------------------!

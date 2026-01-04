@@ -1,6 +1,6 @@
 package com.mdt.game.catali.core.type;
 
-import com.mdt.game.catali.config.CataliBalanceConfig;
+import com.mdt.game.catali.config.CataliGeneralConfig;
 import com.mdt.game.catali.core.enums.CataliCommonUpgrade;
 import lombok.Getter;
 import lombok.Locked;
@@ -37,8 +37,8 @@ public final class CataliTeamStat {
         if (pendingExp <= 0) return new ExpEarnResult(0, 0);
 
         var exp = (long) (pendingExp
-                * (level < CataliBalanceConfig.BEGINNER_LEVEL_LEAST_THAN ? CataliBalanceConfig.BEGINNER_EXP_MULTIPLIER : 1)
-                * (1 + experienceUpgrades * CataliBalanceConfig.EXP_MULTIPLIER));
+                * (level < CataliGeneralConfig.BEGINNER_LEVEL_LEAST_THAN ? CataliGeneralConfig.BEGINNER_EXP_MULTIPLIER : 1)
+                * (1 + experienceUpgrades * CataliGeneralConfig.EXP_MULTIPLIER));
         experience += exp;
 
         pendingExp = 0;
