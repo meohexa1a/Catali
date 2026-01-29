@@ -1,95 +1,19 @@
 package com.mdt.game;
 
-import arc.Core;
-import com.mdt.common.shared.type.TimeHolder;
-import com.mdt.common.shared.utils.CommonUtils;
-import com.mdt.game.catali.Catali;
-import com.mdt.game.sleep.Sleep;
-import io.micronaut.runtime.event.annotation.EventListener;
-import io.micronaut.scheduling.annotation.Scheduled;
-import jakarta.annotation.PostConstruct;
-import jakarta.inject.Singleton;
-import lombok.Locked;
+import com.mdt.common.signal.Failure;
+import com.mdt.common.signal.Unit;
+import com.mdt.mindustry.utils.MindustryMap;
+import com.mdt.mindustry.utils.MindustryWorld;
+import com.mdt.mindustry.utils.exception.WorldLoadException;
 import lombok.RequiredArgsConstructor;
-import mindustry.game.EventType;
-import mindustry.gen.Groups;
+
+import javax.inject.Singleton;
 
 @Singleton
 @RequiredArgsConstructor
 public class GameControl {
-    private static final long WORLD_IDLE_TIMEOUT = 3 * 60 * 1000;
 
-    private final Sleep sleep;
-    private final Catali catali;
-
-    // !---------------------------------------------------!
-
-    private sealed interface GCState {
-
-        record Playing(TimeHolder lastLeaveHolder) implements GCState {
-
-        }
-
-        final class Sleeping implements GCState {
-            public static final Sleeping INSTANCE = new Sleeping();
-        }
-
-        final class RequireToWake implements GCState {
-            public static final RequireToWake INSTANCE = new RequireToWake();
-        }
-    }
-
-    private GCState gcState = GCState.Sleeping.INSTANCE;
-
-    // !---------------------------------------------------!
-
-    @PostConstruct
-    public void init() {
-        sleep.start();
-    }
-
-    @Scheduled(cron = "*/1 * * * * *")
     public void refresh() {
-        Core.app.post(this::_refresh);
-    }
 
-    @Locked
-    private void _refresh() {
-        switch (gcState) {
-            case GCState.Playing playing -> {
-                var holder = playing.lastLeaveHolder();
-                if (!holder.isHolding() || !holder.isOver(WORLD_IDLE_TIMEOUT)) return;
-
-                catali.stop();
-                sleep.start();
-                this.gcState = GCState.Sleeping.INSTANCE;
-            }
-
-            case GCState.RequireToWake ignored -> {
-                sleep.stop();
-                catali.start();
-                this.gcState = new GCState.Playing(new TimeHolder());
-            }
-
-            default -> CommonUtils.doNothing();
-        }
-    }
-
-    @Locked
-    @EventListener
-    public void listen(EventType.PlayerJoin ignore) {
-        switch (gcState) {
-            case GCState.Playing playing -> playing.lastLeaveHolder().release();
-            case GCState.Sleeping ignored -> this.gcState = GCState.RequireToWake.INSTANCE;
-
-            default -> CommonUtils.doNothing();
-        }
-    }
-
-    @Locked
-    @EventListener
-    public void listen(EventType.PlayerLeave ignore) {
-        if (gcState instanceof GCState.Playing(var lastLeaveHolder) && Groups.player.isEmpty())
-            lastLeaveHolder.hold();
     }
 }
