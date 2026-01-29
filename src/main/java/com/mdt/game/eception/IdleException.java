@@ -15,7 +15,7 @@ public sealed interface IdleException extends Failure {
 
     }
 
-    record LoadError(WorldLoadException worldLoadException) implements IdleException {
+    record MapLoadError(WorldLoadException worldLoadException) implements IdleException {
 
     }
 }

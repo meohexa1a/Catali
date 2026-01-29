@@ -1,10 +1,8 @@
 package com.mdt.game.catali;
 
 import arc.Core;
-import com.mdt.common.shared.utils.CommonUtils;
+import com.mdt.common.utils.CommonUtils;
 import com.mdt.game.catali.config.CataliGeneralConfig;
-import io.micronaut.scheduling.annotation.Scheduled;
-import jakarta.inject.Singleton;
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +51,6 @@ public class Catali {
 
     // !----------------------------------------------------!
 
-    @Scheduled(cron = "*/1 * * * * *")
     public void refresh() {
         Core.app.post(this::_refresh);
     }

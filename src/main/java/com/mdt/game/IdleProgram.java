@@ -32,7 +32,7 @@ public class IdleProgram {
             Files.copy(res, file.toPath());
 
             return MindustryWorld.loadFile(new Fi(file))
-                    .mapError(IdleException.LoadError::new);
+                    .mapError(IdleException.MapLoadError::new);
         } catch (IOException e) {
              return Result.error(new IdleException.IdleMapFileCorrupted(e));
         }
@@ -40,6 +40,6 @@ public class IdleProgram {
 
     private static Result<Unit, IdleException> loadRandom() {
         return MindustryWorld.loadMap(MindustryMap.getRandom())
-                .mapError(IdleException.LoadError::new);
+                .mapError(IdleException.MapLoadError::new);
     }
 }
