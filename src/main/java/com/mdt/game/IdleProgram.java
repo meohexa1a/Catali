@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 @UtilityClass
-public class IdleProgram {
+class IdleProgram {
 
     @Locked
     public static Result<Unit, IdleException> load() {
@@ -34,7 +34,7 @@ public class IdleProgram {
             return MindustryWorld.loadFile(new Fi(file))
                     .mapError(IdleException.MapLoadError::new);
         } catch (IOException e) {
-             return Result.error(new IdleException.IdleMapFileCorrupted(e));
+            return Result.error(new IdleException.IdleMapFileCorrupted(e));
         }
     }
 

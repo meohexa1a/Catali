@@ -1,7 +1,10 @@
 package com.mdt.game;
 
+import com.mdt.common.utils.CommonUtils;
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
+import mindustry.game.EventType;
+import mindustry.gen.Groups;
 
 import javax.inject.Singleton;
 
@@ -13,12 +16,31 @@ final class GameControl {
 
     // !--------------------------------------------------------!
 
+    @Locked
     public void refresh() {
-
+        switch (gcState) {
+            case GCState.Idling idling -> {
+            }
+            case GCState.Playing playing -> {
+            }
+            case GCState.RequireToWake requireToWake -> {
+            }
+        }
     }
 
-    public void listen() {
+    @Locked
+    public void listen(EventType.PlayerLeave event) {
+        if (gcState instanceof GCState.Playing(TimeHolder timeHolder) && Groups.player.isEmpty())
+            timeHolder.keep();
+    }
 
+    @Locked
+    public void listen(EventType.PlayerJoin event) {
+        switch (gcState) {
+            case GCState.Idling ignored -> gcState = new GCState.RequireToWake();
+            case GCState.Playing(TimeHolder timeHolder ) -> timeHolder.clear();
+            case GCState.RequireToWake ignored -> CommonUtils.doNothing();
+        }
     }
 }
 
@@ -40,8 +62,8 @@ class TimeHolder {
     private long time = -1;
 
     @Locked
-    void keep(long additiveTime) {
-        if (time == -1) time = System.currentTimeMillis() + additiveTime;
+    void keep() {
+        if (time == -1) time = System.currentTimeMillis() + CommonConfig.WORLD_IDLE_TIMEOUT;
     }
 
     @Locked
