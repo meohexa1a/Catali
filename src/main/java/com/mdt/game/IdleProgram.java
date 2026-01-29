@@ -8,26 +8,23 @@ import com.mdt.game.eception.IdleException;
 import com.mdt.mindustry.utils.MindustryMap;
 import com.mdt.mindustry.utils.MindustryWorld;
 import lombok.Locked;
-import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-@Singleton
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-public final class IdleProgram {
+@UtilityClass
+public class IdleProgram {
 
     @Locked
-    public Result<Unit, IdleException> load() {
+    public static Result<Unit, IdleException> load() {
         return loadFromInternal().recoverWith(e -> loadRandom());
     }
 
     // !--------------------------------------------------------!
 
-    private Result<Unit, IdleException> loadFromInternal() {
+    private static Result<Unit, IdleException> loadFromInternal() {
         try (var res = MintyMDTPlugin.class.getResourceAsStream(CommonConfig.IDLE_MAP_DIR)) {
             if (res == null) return Result.error(new IdleException.IdleMapFileNotFound());
 
@@ -41,7 +38,7 @@ public final class IdleProgram {
         }
     }
 
-    private Result<Unit, IdleException> loadRandom() {
+    private static Result<Unit, IdleException> loadRandom() {
         return MindustryWorld.loadMap(MindustryMap.getRandom())
                 .mapError(IdleException.LoadError::new);
     }
