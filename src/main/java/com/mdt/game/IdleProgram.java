@@ -18,7 +18,7 @@ import java.nio.file.Files;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class IdleProgram {
+public final class IdleProgram {
 
     @Locked
     public Result<Unit, IdleException> load() {

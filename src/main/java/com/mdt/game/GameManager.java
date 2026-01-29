@@ -8,13 +8,24 @@ import javax.inject.Singleton;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class GameManager {
+final class GameManager {
 
     {
-        Timer.schedule(this::init, 3);
+        Timer.schedule(this::init, 5);
     }
 
     private void init() {
+        listenEvent();
+        Timer.schedule(this::refresh, 0, 1);
+    }
+
+    // !-----------------------------------------------------------------!
+
+    private void refresh() {
+
+    }
+
+    private void listenEvent() {
 
     }
 }
