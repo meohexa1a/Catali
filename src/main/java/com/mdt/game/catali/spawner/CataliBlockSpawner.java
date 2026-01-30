@@ -23,10 +23,7 @@ public final class CataliBlockSpawner {
         int used = 0;
         while (used < targetSpawn) {
             var block = CataliBlockSpawnerConfig.getRandomBlockToSpawn();
-
-            int cluster = ThreadLocalRandom.current().nextInt(28, 96);
-            cluster = Math.min(cluster, (targetSpawn - used) / block.size);
-            if (cluster <= 0) break;
+            int cluster = ThreadLocalRandom.current().nextInt(28, 96) / block.size;
 
             MindustrySpawnUtils.spawnBlockCluster(block, cluster);
             used += cluster * block.size;

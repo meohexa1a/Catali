@@ -12,26 +12,15 @@ import static mindustry.content.UnitTypes.*;
 @UtilityClass
 public class CataliEnemySpawnerConfig {
     public static final Team ENEMY_TEAM = Team.crux;
-
     public static final int ENEMY_LIMIT = 400;
     public static final int ENEMY_PER_PLAYER = 15;
 
-    public static final int BOSS_LIMIT = 30;
-    public static final int BOSS_PER_PLAYER = 2;
-
-    // !--------------------------------------------------------!
-
     private static final List<List<UnitType>> WEIGHTED_ENEMIES = new ArrayList<>();
-    private static final List<List<UnitType>> WEIGHTED_BOSSES = new ArrayList<>();
 
     // !--------------------------------------------------------!
 
     public static List<UnitType> getRandomEnemiesGroup() {
         return WEIGHTED_ENEMIES.get(ThreadLocalRandom.current().nextInt(WEIGHTED_ENEMIES.size()));
-    }
-
-    public static List<UnitType> getRandomBossGroup() {
-        return WEIGHTED_BOSSES.get(ThreadLocalRandom.current().nextInt(WEIGHTED_BOSSES.size()));
     }
 
     // !--------------------------------------------------------!
@@ -91,18 +80,11 @@ public class CataliEnemySpawnerConfig {
         enemiesSpawnChances.put(List.of(stell, mega, retusa, locus, tecta, poly), 17);
         enemiesSpawnChances.put(List.of(minke, locus, fortress, spiroct, poly), 16);
 
+        enemiesSpawnChances.put(List.of(collaris, collaris, navanax, oct, oct, oct, vela, vela), 1);
+        enemiesSpawnChances.put(List.of(collaris, reign, navanax, reign, oct, oct, toxopid, vela), 1);
+
         for (Map.Entry<List<UnitType>, Integer> e : enemiesSpawnChances.entrySet())
             WEIGHTED_ENEMIES.addAll(Collections.nCopies(e.getValue(), e.getKey()));
         Collections.shuffle(WEIGHTED_ENEMIES);
-
-
-        Map<List<UnitType>, Integer> bossSpawnChances = new HashMap<>();
-
-        bossSpawnChances.put(List.of(collaris, collaris, navanax, oct, oct, oct, vela, vela), 1);
-        bossSpawnChances.put(List.of(collaris, reign, navanax, reign, oct, oct, toxopid, vela), 1);
-
-        for (Map.Entry<List<UnitType>, Integer> e : bossSpawnChances.entrySet())
-            WEIGHTED_BOSSES.addAll(Collections.nCopies(e.getValue(), e.getKey()));
-        Collections.shuffle(WEIGHTED_BOSSES);
     }
 }
