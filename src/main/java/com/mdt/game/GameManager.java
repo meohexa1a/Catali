@@ -19,6 +19,7 @@ final class GameManager {
 
     {
         Timer.schedule(this::init, 5);
+        log.info("Catali.io start after 5 seconds...");
     }
 
     private void init() {
@@ -50,6 +51,8 @@ final class GameManager {
     private void registerCommands() {
 
     }
+
+    // !-------------------------------------------------------!
 
     private void logEventError(Runnable r) {
         try {

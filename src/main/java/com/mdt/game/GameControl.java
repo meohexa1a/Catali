@@ -27,7 +27,8 @@ final class GameControl {
             case GCState.Idling ignored -> CommonUtils.doNothing();
 
             case GCState.Playing playing -> {
-                if (!playing.timeHolder().isOver()) catali.refresh();
+                if (!playing.timeHolder().isOver())
+                    catali.refresh();
                 else IdleProgram.load().onSuccess(u -> {
                     catali.stop();
                     this.gcState = new GCState.Idling();
@@ -42,17 +43,17 @@ final class GameControl {
     }
 
     @Locked
-    public void listen(EventType.PlayerLeave event) {
+    public void listen(EventType.PlayerLeave ignored) {
         if (gcState instanceof GCState.Playing(TimeHolder timeHolder) && Groups.player.isEmpty())
             timeHolder.keep();
     }
 
     @Locked
-    public void listen(EventType.PlayerJoin event) {
+    public void listen(EventType.PlayerJoin ignored) {
         switch (gcState) {
-            case GCState.Idling ignored -> this.gcState = new GCState.RequireToWake();
+            case GCState.Idling ignored1 -> this.gcState = new GCState.RequireToWake();
             case GCState.Playing(TimeHolder timeHolder) -> timeHolder.clear();
-            case GCState.RequireToWake ignored -> CommonUtils.doNothing();
+            case GCState.RequireToWake ignored1 -> CommonUtils.doNothing();
         }
     }
 }
