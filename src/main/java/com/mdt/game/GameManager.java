@@ -1,8 +1,10 @@
 package com.mdt.game;
 
+import arc.Events;
 import arc.util.Timer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mindustry.game.EventType;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,10 +36,32 @@ final class GameManager {
     }
 
     private void listenEvent() {
+        Events.on(EventType.PlayerJoin.class, e -> {
+            logEventError(() -> gameControl.listen(e));
+        });
 
+        Events.on(EventType.PlayerLeave.class, e -> {
+            logEventError(() -> gameControl.listen(e));
+        });
     }
 
     private void registerCommands() {
 
+    }
+
+    private void logEventError(Runnable r) {
+        try {
+            r.run();
+        } catch (Exception e) {
+            log.error("Event error", e);
+        }
+    }
+
+    private void logCommandError(Runnable r) {
+        try {
+            r.run();
+        } catch (Exception e) {
+            log.error("Command error", e);
+        }
     }
 }

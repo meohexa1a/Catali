@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindustry.Vars;
 
+import javax.inject.Singleton;
+
 @Slf4j
 @Singleton
 @RequiredArgsConstructor

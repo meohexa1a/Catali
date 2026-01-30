@@ -1,16 +1,20 @@
 package com.mdt.game;
 
 import com.mdt.common.utils.CommonUtils;
+import com.mdt.game.catali.Catali;
+
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
 import mindustry.game.EventType;
 import mindustry.gen.Groups;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 final class GameControl {
+    private final Catali catali;
 
     private GCState gcState = new GCState.RequireToWake();
 
@@ -19,11 +23,19 @@ final class GameControl {
     @Locked
     public void refresh() {
         switch (gcState) {
-            case GCState.Idling idling -> {
-            }
+            case GCState.Idling ignored -> CommonUtils.doNothing();
+
             case GCState.Playing playing -> {
+                if (!playing.timeHolder().isOver()) catali.refresh();
+                else IdleProgram.load().onSuccess(u -> {
+                    catali.stop();
+                    this.gcState = new GCState.Idling();
+                });
             }
-            case GCState.RequireToWake requireToWake -> {
+
+            case GCState.RequireToWake ignored -> {
+                catali.start();
+                this.gcState = new GCState.Playing(new TimeHolder());
             }
         }
     }
@@ -37,14 +49,15 @@ final class GameControl {
     @Locked
     public void listen(EventType.PlayerJoin event) {
         switch (gcState) {
-            case GCState.Idling ignored -> gcState = new GCState.RequireToWake();
-            case GCState.Playing(TimeHolder timeHolder ) -> timeHolder.clear();
+            case GCState.Idling ignored -> this.gcState = new GCState.RequireToWake();
+            case GCState.Playing(TimeHolder timeHolder) -> timeHolder.clear();
             case GCState.RequireToWake ignored -> CommonUtils.doNothing();
         }
     }
 }
 
 sealed interface GCState {
+
     record Playing(TimeHolder timeHolder) implements GCState {
 
     }

@@ -14,16 +14,9 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class CataliGeneralConfig {
-    // ! World Config - General
     public static final int CHUNK_SIZE = 50;
 
-    // ! Team Config
-    public static final float HEALTH_MULTIPLIER = 0.05f;
-    public static final float DAMAGE_MULTIPLIER = 0.05f;
-    public static final int HEALING_PER_SEC = 8;
-    public static final float EXP_MULTIPLIER = 0.05f;
-
-    public static final int BEGINNER_LEVEL_LEAST_THAN = 25;
+    public static final int BEGINNER_LEVEL_LEAST_THAN = 30;
     public static final int BEGINNER_EXP_MULTIPLIER = 4;
 
     public static final int EXP_FROM_IDLE_UNIT_PER_REFRESH = 40;
