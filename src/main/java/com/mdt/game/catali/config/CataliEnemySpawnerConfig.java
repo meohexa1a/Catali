@@ -12,10 +12,10 @@ import static mindustry.content.UnitTypes.*;
 @UtilityClass
 public class CataliEnemySpawnerConfig {
     public static final Team ENEMY_TEAM = Team.crux;
+
     public static final int ENEMY_LIMIT = 400;
     public static final int ENEMY_PER_PLAYER = 15;
 
-    public static final Team BOSS_TEAM = Team.crux;
     public static final int BOSS_LIMIT = 30;
     public static final int BOSS_PER_PLAYER = 2;
 
