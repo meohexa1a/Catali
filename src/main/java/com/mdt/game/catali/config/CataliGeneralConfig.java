@@ -23,22 +23,22 @@ public class CataliGeneralConfig {
     public static final List<UnitType> IDLE_UNITS = List.of(oct, quell, disrupt);
 
     private static final List<String> RANKING_EMOJI = List.of(
-            Items.copper.emoji(),
-            Items.lead.emoji(),
-            Items.graphite.emoji(),
-            Items.metaglass.emoji(),
-            Items.silicon.emoji(),
-            Items.titanium.emoji(),
-            Items.beryllium.emoji(),
-            Items.tungsten.emoji(),
-            Items.plastanium.emoji(),
-            Items.oxide.emoji(),
-            Items.thorium.emoji(),
-            Items.carbide.emoji(),
-            Items.phaseFabric.emoji(),
-            Items.surgeAlloy.emoji(),
-            Items.pyratite.emoji(),
-            Items.blastCompound.emoji());
+        Items.copper.emoji(),
+        Items.lead.emoji(),
+        Items.graphite.emoji(),
+        Items.metaglass.emoji(),
+        Items.silicon.emoji(),
+        Items.titanium.emoji(),
+        Items.beryllium.emoji(),
+        Items.tungsten.emoji(),
+        Items.plastanium.emoji(),
+        Items.oxide.emoji(),
+        Items.thorium.emoji(),
+        Items.carbide.emoji(),
+        Items.phaseFabric.emoji(),
+        Items.surgeAlloy.emoji(),
+        Items.pyratite.emoji(),
+        Items.blastCompound.emoji());
 
     // !-------------------------------------------!
 
@@ -48,7 +48,7 @@ public class CataliGeneralConfig {
 
     // !-------------------------------------------!
 
-    public static void onModeLoaded() {
+    static {
         Vars.content.units().forEach(u -> u.flying = u.naval || u.flying);
 
         UnitTypes.omura.weapons.get(0).bullet.damage /= 2;

@@ -6,7 +6,6 @@ import com.mdt.game.catali.utils.MindustrySpawnUtils;
 import lombok.RequiredArgsConstructor;
 
 import mindustry.gen.Groups;
-import mindustry.gen.Player;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
