@@ -21,7 +21,7 @@ public class Catali {
     }
 
     public void stop() {
-        CataliGeneralConfig.onModeUnload();
+
 
         mapLoaded = false;
     }

@@ -13,7 +13,7 @@ import static mindustry.content.Blocks.*;
 public class CataliBlockSpawnerConfig {
     public static final Team BLOCK_TEAM = Team.crux;
     public static final float BLOCK_FILL_RATE = 2.5f / 100; // 2.5%
-    public static final float MAX_BLOCK_SPAWNED_PER_REFRESH = 50;
+    public static final float MAX_BLOCK_SPAWNED_PER_REFRESH = 100;
 
     private static final List<Block> WEIGHTED_BLOCKS = new ArrayList<>();
 
@@ -54,9 +54,11 @@ public class CataliBlockSpawnerConfig {
         blocksToSpawnChance.put(reinforcedVault, 1);
         blocksToSpawnChance.put(thoriumReactor, 1);
 
-        for (var entry : blocksToSpawnChance.entrySet())
+        for (var entry : blocksToSpawnChance.entrySet()) {
+            entry.getKey().update = true;
             WEIGHTED_BLOCKS.addAll(Collections.nCopies(entry.getValue(), entry.getKey()));
+        }
+
         Collections.shuffle(WEIGHTED_BLOCKS);
     }
-
 }

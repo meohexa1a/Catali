@@ -19,7 +19,7 @@ public class CataliGeneralConfig {
     public static final int BEGINNER_LEVEL_LEAST_THAN = 30;
     public static final int BEGINNER_EXP_MULTIPLIER = 4;
 
-    public static final int EXP_FROM_IDLE_UNIT_PER_REFRESH = 40;
+    public static final int EXP_FROM_IDLE_UNIT = 40;
     public static final List<UnitType> IDLE_UNITS = List.of(oct, quell, disrupt);
 
     private static final List<String> RANKING_EMOJI = List.of(
@@ -53,17 +53,5 @@ public class CataliGeneralConfig {
 
         UnitTypes.omura.weapons.get(0).bullet.damage /= 2;
         UnitTypes.collaris.speed /= 2;
-    }
-
-    public static void onModeUnload() {
-        Vars.content.units().forEach(u -> u.flying = !u.naval && u.flying);
-
-        for (var t : Team.all) {
-            t.rules().unitHealthMultiplier = 1;
-            t.rules().unitDamageMultiplier = 1;
-        }
-
-        UnitTypes.omura.weapons.get(0).bullet.damage *= 2;
-        UnitTypes.collaris.speed *= 2;
     }
 }

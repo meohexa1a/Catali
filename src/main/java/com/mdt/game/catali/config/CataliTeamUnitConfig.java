@@ -13,7 +13,6 @@ import static mindustry.content.UnitTypes.*;
 
 @UtilityClass
 public class CataliTeamUnitConfig {
-    private static final Map<UnitType, Set<UnitType>> UNIT_EVOLUTIONS = new HashMap<>();
 
     private static final Map<UnitType, Integer> UNIT_CATCH_CHANCE = new HashMap<>();
     private static final Map<UnitType, Integer> UNIT_RESPAWN_TIME = new HashMap<>();
@@ -29,9 +28,6 @@ public class CataliTeamUnitConfig {
 
     // !-----------------------------------------------------------------!
 
-    public static Set<UnitType> getUnitEvolutions(UnitType unit) {
-        return UNIT_EVOLUTIONS.getOrDefault(unit, Collections.emptySet());
-    }
 
     public static int getUnitRespawnTime(UnitType unit) {
         return UNIT_RESPAWN_TIME.getOrDefault(unit, 0);
@@ -56,55 +52,6 @@ public class CataliTeamUnitConfig {
     // !-----------------------------------------------------------------!
 
     static {
-        UNIT_EVOLUTIONS.put(poly, Set.of(dagger, flare, retusa, nova, mega));
-        UNIT_EVOLUTIONS.put(mega, Set.of(quad));
-        UNIT_EVOLUTIONS.put(quad, Set.of(oct));
-
-        UNIT_EVOLUTIONS.put(dagger, Set.of(mace, atrax, stell));
-        UNIT_EVOLUTIONS.put(mace, Set.of(fortress));
-        UNIT_EVOLUTIONS.put(fortress, Set.of(scepter));
-        UNIT_EVOLUTIONS.put(scepter, Set.of(reign));
-
-        UNIT_EVOLUTIONS.put(atrax, Set.of(spiroct));
-        UNIT_EVOLUTIONS.put(spiroct, Set.of(arkyid));
-        UNIT_EVOLUTIONS.put(arkyid, Set.of(toxopid));
-
-        UNIT_EVOLUTIONS.put(stell, Set.of(locus));
-        UNIT_EVOLUTIONS.put(locus, Set.of(precept));
-        UNIT_EVOLUTIONS.put(precept, Set.of(vanquish));
-        UNIT_EVOLUTIONS.put(vanquish, Set.of(conquer));
-
-        UNIT_EVOLUTIONS.put(flare, Set.of(horizon, elude));
-        UNIT_EVOLUTIONS.put(horizon, Set.of(zenith));
-        UNIT_EVOLUTIONS.put(zenith, Set.of(antumbra));
-        UNIT_EVOLUTIONS.put(antumbra, Set.of(eclipse));
-
-        UNIT_EVOLUTIONS.put(elude, Set.of(avert));
-        UNIT_EVOLUTIONS.put(avert, Set.of(obviate));
-        UNIT_EVOLUTIONS.put(obviate, Set.of(quell));
-        UNIT_EVOLUTIONS.put(quell, Set.of(disrupt));
-
-        UNIT_EVOLUTIONS.put(retusa, Set.of(oxynoe, risso));
-        UNIT_EVOLUTIONS.put(oxynoe, Set.of(cyerce));
-        UNIT_EVOLUTIONS.put(cyerce, Set.of(aegires));
-        UNIT_EVOLUTIONS.put(aegires, Set.of(navanax));
-
-        UNIT_EVOLUTIONS.put(risso, Set.of(minke));
-        UNIT_EVOLUTIONS.put(minke, Set.of(bryde));
-        UNIT_EVOLUTIONS.put(bryde, Set.of(sei));
-        UNIT_EVOLUTIONS.put(sei, Set.of(omura));
-
-        UNIT_EVOLUTIONS.put(nova, Set.of(pulsar, merui));
-        UNIT_EVOLUTIONS.put(pulsar, Set.of(quasar));
-        UNIT_EVOLUTIONS.put(quasar, Set.of(vela));
-        UNIT_EVOLUTIONS.put(vela, Set.of(corvus));
-
-        UNIT_EVOLUTIONS.put(merui, Set.of(cleroi));
-        UNIT_EVOLUTIONS.put(cleroi, Set.of(anthicus));
-        UNIT_EVOLUTIONS.put(anthicus, Set.of(tecta));
-        UNIT_EVOLUTIONS.put(tecta, Set.of(collaris));
-
-
         UNIT_RESPAWN_TIME.put(dagger, 60);
         UNIT_RESPAWN_TIME.put(nova, 60);
         UNIT_RESPAWN_TIME.put(crawler, 60);
