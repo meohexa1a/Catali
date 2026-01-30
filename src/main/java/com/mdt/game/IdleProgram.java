@@ -1,12 +1,14 @@
 package com.mdt.game;
 
 import arc.files.Fi;
+
 import com.mdt.MintyMDTPlugin;
 import com.mdt.common.signal.Result;
 import com.mdt.common.signal.Unit;
 import com.mdt.game.eception.IdleException;
 import com.mdt.mindustry.utils.MindustryMap;
 import com.mdt.mindustry.utils.MindustryWorld;
+
 import lombok.Locked;
 import lombok.experimental.UtilityClass;
 
@@ -31,15 +33,13 @@ class IdleProgram {
             var file = File.createTempFile("sleep", ".msav");
             Files.copy(res, file.toPath());
 
-            return MindustryWorld.loadFile(new Fi(file))
-                    .mapError(IdleException.MapLoadError::new);
+            return MindustryWorld.loadFile(new Fi(file)).mapError(IdleException.MapLoadError::new);
         } catch (IOException e) {
             return Result.error(new IdleException.IdleMapFileCorrupted(e));
         }
     }
 
     private static Result<Unit, IdleException> loadRandom() {
-        return MindustryWorld.loadMap(MindustryMap.getRandom())
-                .mapError(IdleException.MapLoadError::new);
+        return MindustryWorld.loadMap(MindustryMap.getRandom()).mapError(IdleException.MapLoadError::new);
     }
 }

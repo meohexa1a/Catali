@@ -5,6 +5,7 @@ import com.mdt.game.catali.Catali;
 
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
+
 import mindustry.game.EventType;
 import mindustry.gen.Groups;
 
@@ -71,7 +72,7 @@ sealed interface GCState {
     }
 }
 
-class TimeHolder {
+final class TimeHolder {
     private long time = -1;
 
     @Locked
