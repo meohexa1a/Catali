@@ -1,7 +1,9 @@
 package com.mdt.game.catali.config;
 
 import arc.struct.Seq;
+
 import lombok.experimental.UtilityClass;
+
 import mindustry.gen.Unit;
 import mindustry.type.StatusEffect;
 import mindustry.type.UnitType;
@@ -13,21 +15,36 @@ import static mindustry.content.UnitTypes.*;
 
 @UtilityClass
 public class CataliTeamUnitConfig {
+    public enum UnitTier {
+        Tier1,
+        Tier2,
+        Tier3,
+        Tier4,
+        Tier5,
+        OverPowerTier5;
+    }
+
+    private static final EnumMap<UnitTier, Set<UnitType>> UNIT_TIER = new EnumMap<>(UnitTier.class) {{
+        put(UnitTier.Tier1, Set.of(dagger, nova, flare, poly));
+        put(UnitTier.Tier2, Set.of(mace, pulsar, atrax, horizon, risso, retusa, stell, merui, elude));
+        put(UnitTier.Tier3, Set.of(fortress, quasar, spiroct, zenith, mega, minke, oxynoe, locus, cleroi, avert));
+        put(UnitTier.Tier4, Set.of(scepter, vela, arkyid, antumbra, quad,  bryde, cyerce, precept, anthicus, obviate));
+        put(UnitTier.Tier5, Set.of(reign, corvus, toxopid, eclipse, oct, sei, aegires, vanquish, tecta, quell));
+        put(UnitTier.OverPowerTier5, Set.of(omura, navanax, conquer, collaris, disrupt));
+    }};
 
     private static final Map<UnitType, Integer> UNIT_CATCH_CHANCE = new HashMap<>();
     private static final Map<UnitType, Integer> UNIT_RESPAWN_TIME = new HashMap<>();
 
-    private static final List<UnitType> BUFF_WHITELIST = List.of(
-            reign, corvus, toxopid,
-            eclipse, oct,
-            omura, navanax,
-            conquer, collaris, disrupt);
+    private static final Set<UnitType> BUFF_WHITELIST = Set.copyOf(
+        UNIT_TIER.get(UnitTier.OverPowerTier5),
+        UNIT_TIER.get(UnitTier.Tier5)
+    );
 
     private static final List<StatusEffect> BUFF_EFFECT_WHITELIST = List.of(
-            fast, overdrive, overclock, shielded, boss);
+        fast, overdrive, overclock, shielded, boss);
 
     // !-----------------------------------------------------------------!
-
 
     public static int getUnitRespawnTime(UnitType unit) {
         return UNIT_RESPAWN_TIME.getOrDefault(unit, 0);
@@ -36,7 +53,6 @@ public class CataliTeamUnitConfig {
     public static int getUnitCatchChance(UnitType unit) {
         return UNIT_CATCH_CHANCE.getOrDefault(unit, 0);
     }
-
 
     public static List<Unit> selectUnitsCanBeBuff(Seq<Unit> units) {
         return units.select(u -> BUFF_WHITELIST.contains(u.type)).list();
@@ -100,7 +116,6 @@ public class CataliTeamUnitConfig {
         UNIT_RESPAWN_TIME.put(conquer, 300);
         UNIT_RESPAWN_TIME.put(collaris, 300);
         UNIT_RESPAWN_TIME.put(disrupt, 220);
-
 
         UNIT_CATCH_CHANCE.put(dagger, 50);
         UNIT_CATCH_CHANCE.put(nova, 50);
