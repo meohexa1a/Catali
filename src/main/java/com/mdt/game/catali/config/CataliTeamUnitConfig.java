@@ -9,12 +9,16 @@ import mindustry.type.StatusEffect;
 import mindustry.type.UnitType;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static mindustry.content.StatusEffects.*;
 import static mindustry.content.UnitTypes.*;
 
 @UtilityClass
 public class CataliTeamUnitConfig {
+    private static final int RESPAWN_PER_TIER = 60;
+    private static final float BASE_CATCH_CHANCE = 0.5f;
+
     public enum UnitTier {
         Tier1,
         Tier2,
@@ -60,57 +64,37 @@ public class CataliTeamUnitConfig {
         }).list();
     }
 
-    public static List<StatusEffect> selectBuffsCanBeApplied(Unit u) {
-        var buffs = new ArrayList<>(BUFF_EFFECT_WHITELIST);
-
-        buffs.removeIf(u::hasEffect);
-        return buffs;
-    }
-
-    private static final int BASE_RESPAWN_TIME = 60;
-    private static final int RESPAWN_PER_TIER = 60;
-
     public static int getUnitRespawnTime(UnitType unit) {
         var tier = getTier(unit);
         if (tier == null) return 0;
 
-        return BASE_RESPAWN_TIME + tier.ordinal() * RESPAWN_PER_TIER;
+        return (tier.ordinal() + 1) * RESPAWN_PER_TIER;
     }
 
-    private static final double BASE_CATCH_CHANCE = 50.0;
-    private static final double CATCH_DECAY = 0.75; // giảm 25% mỗi tier
-
-    public static int getUnitCatchChance(UnitType unit) {
+    public static float getUnitCatchChance(UnitType unit) {
         var tier = getTier(unit);
         if (tier == null) return 0;
 
-        double chance = BASE_CATCH_CHANCE * Math.pow(CATCH_DECAY, tier.ordinal());
-        return Math.max(1, (int) Math.round(chance));
+        return BASE_CATCH_CHANCE / (1 + tier.ordinal());
     }
 
-    public static List<UnitType> randomUnits(
-        int t1, int t2, int t3, int t4, int t5, int ot5
-    ) {
+    public static List<UnitType> randomUnits(int t1, int t2, int t3, int t4, int t5, int ot5) {
         var result = new ArrayList<UnitType>();
-        var rand = new Random();
 
-        pick(result, rand, UnitTier.Tier1, t1);
-        pick(result, rand, UnitTier.Tier2, t2);
-        pick(result, rand, UnitTier.Tier3, t3);
-        pick(result, rand, UnitTier.Tier4, t4);
-        pick(result, rand, UnitTier.Tier5, t5);
-        pick(result, rand, UnitTier.OverPowerTier5, ot5);
+        pick(result, UnitTier.Tier1, t1);
+        pick(result, UnitTier.Tier2, t2);
+        pick(result, UnitTier.Tier3, t3);
+        pick(result, UnitTier.Tier4, t4);
+        pick(result, UnitTier.Tier5, t5);
+        pick(result, UnitTier.OverPowerTier5, ot5);
 
         return result;
     }
 
-    private static void pick(List<UnitType> out, Random rand, UnitTier tier, int amount) {
-        if (amount <= 0) return;
-
-        var pool = new ArrayList<>(UNIT_TIER.get(tier));
-        Collections.shuffle(pool, rand);
-
-        for (int i = 0; i < Math.min(amount, pool.size()); i++) out.add(pool.get(i));
+    private static void pick(List<UnitType> out, UnitTier tier, int amount) {
+        var tierList = UNIT_TIER_LIST.get(tier);
+        for (int i = 0; i < amount; i++)
+            out.add(tierList.get(ThreadLocalRandom.current().nextInt(tierList.size())));
     }
 
     private static UnitTier getTier(UnitType unit) {
