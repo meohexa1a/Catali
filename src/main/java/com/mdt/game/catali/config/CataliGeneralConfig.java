@@ -1,9 +1,6 @@
 package com.mdt.game.catali.config;
 
-import mindustry.Vars;
 import mindustry.content.Items;
-import mindustry.content.UnitTypes;
-import mindustry.game.Team;
 import mindustry.type.UnitType;
 
 import java.util.List;
@@ -14,8 +11,6 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class CataliGeneralConfig {
-    public static final int CHUNK_SIZE = 50;
-
     public static final int BEGINNER_LEVEL_LEAST_THAN = 30;
     public static final int BEGINNER_EXP_MULTIPLIER = 4;
 
@@ -44,11 +39,5 @@ public class CataliGeneralConfig {
 
     public static String getRankEmoji(long level) {
         return RANKING_EMOJI.get(Math.min(Math.max((int) level / 10, 0), RANKING_EMOJI.size() - 1));
-    }
-
-    // !-------------------------------------------!
-
-    static {
-        Vars.content.units().forEach(u -> u.flying = u.naval || u.flying);
     }
 }
