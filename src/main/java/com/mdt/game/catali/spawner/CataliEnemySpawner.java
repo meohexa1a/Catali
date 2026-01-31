@@ -1,7 +1,6 @@
 package com.mdt.game.catali.spawner;
 
-import com.mdt.game.catali.config.CataliEnemySpawnerConfig;
-import com.mdt.game.catali.utils.MindustrySpawnUtils;
+import com.mdt.game.catali.utils.CataliCommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +21,7 @@ public class CataliEnemySpawner {
         while (toSpawn > 0) {
             var group = CataliEnemySpawnerConfig.getRandomEnemiesGroup();
 
-            MindustrySpawnUtils.spawnUnitCluster(group, CataliEnemySpawnerConfig.ENEMY_TEAM);
+            CataliCommonUtils.spawnUnitCluster(group, CataliEnemySpawnerConfig.ENEMY_TEAM);
             toSpawn -= group.size();
         }
     }

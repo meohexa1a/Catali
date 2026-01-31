@@ -1,4 +1,4 @@
-package com.mdt.game.catali.config;
+package com.mdt.game.catali.spawner;
 
 import lombok.experimental.UtilityClass;
 import mindustry.game.Team;

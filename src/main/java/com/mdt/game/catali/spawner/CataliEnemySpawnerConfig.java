@@ -1,4 +1,4 @@
-package com.mdt.game.catali.config;
+package com.mdt.game.catali.spawner;
 
 import lombok.experimental.UtilityClass;
 import mindustry.game.Team;
@@ -20,6 +20,7 @@ public class CataliEnemySpawnerConfig {
     // !--------------------------------------------------------!
 
     public static List<UnitType> getRandomEnemiesGroup() {
+        return Mindus
         return WEIGHTED_ENEMIES.get(ThreadLocalRandom.current().nextInt(WEIGHTED_ENEMIES.size()));
     }
 

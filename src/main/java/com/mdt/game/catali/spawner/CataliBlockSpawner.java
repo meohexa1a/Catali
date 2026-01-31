@@ -1,7 +1,6 @@
 package com.mdt.game.catali.spawner;
 
-import com.mdt.game.catali.config.CataliBlockSpawnerConfig;
-import com.mdt.game.catali.utils.MindustrySpawnUtils;
+import com.mdt.game.catali.utils.CataliCommonUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +24,7 @@ public final class CataliBlockSpawner {
             var block = CataliBlockSpawnerConfig.getRandomBlockToSpawn();
             int cluster = ThreadLocalRandom.current().nextInt(28, 96) / block.size;
 
-            MindustrySpawnUtils.spawnBlockCluster(block, cluster);
+            CataliCommonUtils.spawnBlockCluster(block, cluster);
             used += cluster * block.size;
         }
     }

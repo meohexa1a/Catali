@@ -50,8 +50,5 @@ public class CataliGeneralConfig {
 
     static {
         Vars.content.units().forEach(u -> u.flying = u.naval || u.flying);
-
-        UnitTypes.omura.weapons.get(0).bullet.damage /= 2;
-        UnitTypes.collaris.speed /= 2;
     }
 }
