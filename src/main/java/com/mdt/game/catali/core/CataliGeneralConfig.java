@@ -1,4 +1,4 @@
-package com.mdt.game.catali.config;
+package com.mdt.game.catali.core;
 
 import mindustry.content.Items;
 import mindustry.type.UnitType;
@@ -11,10 +11,11 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class CataliGeneralConfig {
+    public static final float LEVEL_UP_EXP_REQ_MULTIPLIER = 0.05f;
     public static final int BEGINNER_LEVEL_LEAST_THAN = 30;
     public static final int BEGINNER_EXP_MULTIPLIER = 4;
 
-    public static final int EXP_FROM_IDLE_UNIT = 40;
+    public static final int EXP_FROM_IDLE_UNIT = 100;
     public static final List<UnitType> IDLE_UNITS = List.of(oct, quell, disrupt);
 
     private static final List<String> RANKING_EMOJI = List.of(

@@ -1,9 +1,9 @@
-package com.mdt.game.catali.config;
+package com.mdt.game.catali.core;
 
 import arc.struct.Seq;
 
 import com.mdt.game.catali.utils.CataliCommonUtils;
-import com.mdt.game.catali.utils.UnitTier;
+import com.mdt.game.catali.enums.UnitTier;
 
 import lombok.experimental.UtilityClass;
 

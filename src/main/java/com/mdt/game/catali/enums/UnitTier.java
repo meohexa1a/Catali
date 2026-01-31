@@ -1,4 +1,4 @@
-package com.mdt.game.catali.utils;
+package com.mdt.game.catali.enums;
 
 public enum UnitTier {
     Tier1,

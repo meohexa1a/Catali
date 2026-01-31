@@ -5,6 +5,7 @@ import com.mdt.game.catali.spawner.CataliEnemySpawner;
 import com.mdt.mindustry.utils.MindustryMap;
 import com.mdt.mindustry.utils.MindustryWorld;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,14 +20,15 @@ public final class Catali {
     private final CataliEnemySpawner enemySpawner;
 
     private boolean mapLoaded = false;
+    public @Getter boolean isActive = false;
 
     public void start() {
-
+        isActive = true;
     }
 
     public void stop() {
-
         mapLoaded = false;
+        isActive = false;
     }
 
     public void refresh() {
