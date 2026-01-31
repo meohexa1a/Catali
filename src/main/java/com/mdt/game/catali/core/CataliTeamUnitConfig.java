@@ -18,6 +18,8 @@ import static mindustry.content.StatusEffects.*;
 
 @UtilityClass
 public class CataliTeamUnitConfig {
+    public static final int RESPAWN_START_SLOT = 3;
+
     private static final int RESPAWN_PER_TIER = 60;
     private static final float BASE_CATCH_CHANCE = 0.5f;
 

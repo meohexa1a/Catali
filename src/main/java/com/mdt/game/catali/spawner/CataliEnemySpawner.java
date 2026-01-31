@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class CataliEnemySpawner {
+public final class CataliEnemySpawner {
 
     public void refresh() {
         int maxEnemies = Math.min(CataliEnemySpawnerConfig.ENEMY_LIMIT,
