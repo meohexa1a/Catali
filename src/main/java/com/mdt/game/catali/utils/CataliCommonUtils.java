@@ -76,10 +76,18 @@ public class CataliCommonUtils {
         if (units == null || units.isEmpty()) return;
 
         int size = 4;
-        int amount = units.size();
-
         int startX = Mathf.random(Vars.world.width() - size);
         int startY = Mathf.random(Vars.world.height() - size);
+
+        spawnUnitCluster(units, team, startX, startY);
+    }
+
+    public static void spawnUnitCluster(List<UnitType> units, Team team, int startX, int startY) {
+        if (units == null || units.isEmpty()) return;
+
+        int size = 4;
+        int amount = units.size();
+
         int radius = Mathf.ceil(Mathf.sqrt(amount));
 
         int placed = 0;
