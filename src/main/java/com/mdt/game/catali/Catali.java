@@ -12,8 +12,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import mindustry.game.EventType;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Set;
@@ -28,7 +26,6 @@ public final class Catali {
     private final CataliBlockSpawner blockSpawner;
     private final CataliEnemySpawner enemySpawner;
 
-    private final CataliEventListener eventListener;
     private final CataliInterfaceService interfaceService;
 
     private boolean mapLoaded = false;

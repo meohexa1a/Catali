@@ -126,6 +126,7 @@ public final class CataliInterfaceService {
             .row()
 
             .button(common_button_close(player), CommonUtils::doNothing)
+            .row()
 
             .completeContent()
             .build()
@@ -145,17 +146,8 @@ public final class CataliInterfaceService {
 
                 [gray]Use commands and panels to manage your force.""")
 
-            .button("[accent]/members", p ->
-                p.sendMessage("[lightgray]Opens your force member panel.")
-            )
-
-            .button("[accent]/upgrades", p ->
-                p.sendMessage("[lightgray]Access force upgrades and enhancements.")
-            )
-
-            .row()
-
             .button("[accent]Understood", CommonUtils::doNothing)
+            .row()
 
             .completeContent()
             .build()
