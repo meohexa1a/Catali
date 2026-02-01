@@ -3,11 +3,12 @@ package com.mdt.game.catali.store;
 import com.mdt.game.catali.core.CataliTeamUnitConfig;
 import com.mdt.game.catali.enums.UnitTier;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public final class CataliTeamStat {
-    private final int teamId;
+    private final @Getter int teamId;
 
     private int level = 0;
     private int expenrience = 0;

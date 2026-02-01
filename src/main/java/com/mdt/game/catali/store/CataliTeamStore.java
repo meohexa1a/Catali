@@ -3,6 +3,7 @@ package com.mdt.game.catali.store;
 import lombok.Locked;
 import lombok.RequiredArgsConstructor;
 
+import mindustry.game.Team;
 import mindustry.net.Administration;
 
 import javax.inject.Inject;
@@ -12,6 +13,7 @@ import java.util.*;
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public final class CataliTeamStore {
+    private int lastTeamID = Team.baseTeams.length;
     private final Map<Integer, CataliTeamStat> teams = new HashMap<>();
 
     private final Map<Integer, Administration.PlayerInfo> teamLeaders = new HashMap<>();
@@ -120,5 +122,16 @@ public final class CataliTeamStore {
     public boolean isMember(int teamId, Administration.PlayerInfo player) {
         var members = teamMembers.get(teamId);
         return members != null && members.contains(player);
+    }
+
+    @Locked
+    public int getNextTeamId() {
+        for (int i = 0; i < Team.all.length; i++) {
+            if (lastTeamID >= Team.all.length) lastTeamID = Team.baseTeams.length;
+            if (!teams.containsKey(lastTeamID)) return lastTeamID++;
+            lastTeamID++;
+        }
+
+        return -1;
     }
 }
