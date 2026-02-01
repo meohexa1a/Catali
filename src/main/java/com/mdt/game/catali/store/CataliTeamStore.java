@@ -11,7 +11,7 @@ import java.util.*;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class CataliTeamStore {
+public final class CataliTeamStore {
     private final Map<Integer, CataliTeamStat> teams = new HashMap<>();
 
     private final Map<Integer, Administration.PlayerInfo> teamLeaders = new HashMap<>();
@@ -112,13 +112,8 @@ public class CataliTeamStore {
     }
 
     @Locked
-    public Integer getTeamId(Administration.PlayerInfo player) {
-        return playerTeamIndex.get(player);
-    }
-
-    @Locked
-    public boolean exists(int teamId) {
-        return teams.containsKey(teamId);
+    public boolean isPlayed(Administration.PlayerInfo player) {
+        return playerTeamIndex.containsKey(player);
     }
 
     @Locked

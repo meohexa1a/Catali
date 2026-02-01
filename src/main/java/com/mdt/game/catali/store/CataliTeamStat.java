@@ -6,7 +6,7 @@ import com.mdt.game.catali.enums.UnitTier;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CataliTeamStat {
+public final class CataliTeamStat {
     private final int teamId;
 
     private int level = 0;
