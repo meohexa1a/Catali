@@ -1,12 +1,8 @@
 package com.mdt.game.catali;
 
-import com.mdt.common.utils.CommonUtils;
-import com.mdt.game.catali.core.CataliTeamService;
 import com.mdt.game.catali.spawner.CataliBlockSpawner;
 import com.mdt.game.catali.spawner.CataliEnemySpawner;
-import com.mdt.mindustry.command.ClientCommand;
 import com.mdt.mindustry.command.CommandRegisterService;
-import com.mdt.mindustry.command.ConsoleCommand;
 import com.mdt.mindustry.popup.PopupProvider;
 import com.mdt.mindustry.popup.PopupRegisterService;
 import com.mdt.mindustry.utils.MindustryMap;
@@ -20,7 +16,6 @@ import mindustry.game.EventType;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
@@ -33,8 +28,7 @@ public final class Catali {
     private final CataliBlockSpawner blockSpawner;
     private final CataliEnemySpawner enemySpawner;
 
-    private final CataliTeamService teamService;
-
+    private final CataliEventListener eventListener;
     private final CataliInterfaceService interfaceService;
 
     private boolean mapLoaded = false;
@@ -42,64 +36,11 @@ public final class Catali {
 
     // !-----------------------------------------------------!
 
-    private Set<ClientCommand> clientCommands() {
-        var commands = new HashSet<ClientCommand>();
-
-        commands.add(ClientCommand.builder()
-            .prefix("leave").prefix("l")
-            .description("Withdraw from your current force")
-
-            .action((args, player) -> teamService.requestLeaveTeam(player))
-            .build());
-
-        commands.add(ClientCommand.builder()
-            .prefix("disband").prefix("d")
-            .description("Dissolve your command structure (leader only)")
-
-            .action((args, player) -> teamService.requestDisbandTeam(player))
-            .build());
-
-        commands.add(ClientCommand.builder()
-            .prefix("leave").prefix("l")
-            .description("Withdraw from your current force")
-
-            .action((args, player) -> teamService.requestLeaveTeam(player))
-            .build());
-
-        commands.add(ClientCommand.builder()
-            .prefix("members").prefix("m")
-            .description("Show member panel")
-
-            .action((args, player) -> player.sendMessage("..."))
-            .build());
-
-        commands.add(ClientCommand.builder()
-            .prefix("upgrades").prefix("u")
-            .description("Show upgrade panel")
-
-            .action((args, player) -> player.sendMessage("..."))
-            .build());
-
-        return commands;
-    }
-
-    private Set<ConsoleCommand> consoleCommands() {
-        var commands = new HashSet<ConsoleCommand>();
-
-        commands.add(ConsoleCommand.builder()
-            .prefix("catali-status")
-            .description("Show catali game mode status")
-
-            .action(CommonUtils::doNothing)
-            .build());
-
-        return commands;
-    }
 
     public void start() {
         isActive = true;
 
-        commandRegisterService.register("catali", clientCommands(), consoleCommands());
+        commandRegisterService.register("catali", interfaceService.clientCommands(), interfaceService.consoleCommands());
         popupRegisterService.register("catali", Set.of(new PopupProvider(interfaceService::popupContents)));
     }
 
