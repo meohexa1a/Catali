@@ -24,7 +24,7 @@ public final class CataliBlockSpawner {
             var block = CataliBlockSpawnerConfig.getRandomBlockToSpawn();
             int cluster = ThreadLocalRandom.current().nextInt(28, 96) / block.size;
 
-            CataliCommonUtils.spawnBlockCluster(block, cluster);
+            CataliCommonUtils.spawnBlockCluster(block, CataliBlockSpawnerConfig.BLOCK_TEAM, cluster);
             used += cluster * block.size;
         }
     }

@@ -88,7 +88,7 @@ sealed interface GCState {
 }
 
 final class TimeHolder {
-    private long time = -1;
+    private long time = System.currentTimeMillis();
 
     @Locked
     void keep() {

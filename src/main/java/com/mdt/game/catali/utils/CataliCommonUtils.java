@@ -4,6 +4,8 @@ import arc.math.Mathf;
 
 import com.mdt.game.catali.enums.UnitTier;
 
+import com.mdt.game.catali.spawner.CataliBlockSpawnerConfig;
+
 import mindustry.Vars;
 
 import lombok.experimental.UtilityClass;
@@ -105,11 +107,10 @@ public class CataliCommonUtils {
         }
     }
 
-    public static void spawnBlockCluster(Block block, int amount) {
+    public static void spawnBlockCluster(Block block, Team team, int amount) {
         if (block == null || amount <= 0) return;
 
         int size = block.size;
-        Team team = Team.crux;
 
         int startX = Mathf.random(Vars.world.width() - size);
         int startY = Mathf.random(Vars.world.height() - size);
