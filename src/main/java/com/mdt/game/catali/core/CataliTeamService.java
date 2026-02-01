@@ -1,16 +1,11 @@
 package com.mdt.game.catali.core;
 
 import arc.math.geom.Vec2;
-import arc.util.Strings;
-
 import com.mdt.game.catali.CataliInterfaceService;
 import com.mdt.game.catali.store.CataliTeamStore;
-
 import lombok.RequiredArgsConstructor;
-
 import mindustry.content.UnitTypes;
 import mindustry.game.Team;
-import mindustry.gen.Call;
 import mindustry.gen.Player;
 
 import javax.inject.Inject;
@@ -21,7 +16,6 @@ import javax.inject.Singleton;
 public final class CataliTeamService {
 
     private final CataliTeamStore teamStore;
-
     private final CataliInterfaceService interfaceService;
 
     // !-------------------------------------------------------------!
@@ -41,7 +35,6 @@ public final class CataliTeamService {
         }
 
         var team = Team.get(teamId);
-
         UnitTypes.mega.spawn(position, team);
 
         interfaceService.toastCommanderEntered(player);
@@ -53,14 +46,12 @@ public final class CataliTeamService {
         var team = teamStore.getTeamByLeader(info);
 
         if (team == null) {
-            leader.sendMessage("[scarlet]You are not a commander.");
+            interfaceService.sendNotACommander(leader);
             return;
         }
 
         teamStore.removeTeam(team.getTeamId());
-
-        Call.infoToast(Strings.format(
-            "[scarlet]Commander <@[white]{}[]> disbanded their force", leader.name), 5f);
+        interfaceService.toastTeamDisbanded(leader);
     }
 
     public void requestApproveJoin(Player leader, Player target) {
@@ -69,21 +60,19 @@ public final class CataliTeamService {
 
         var team = teamStore.getTeamByLeader(leaderInfo);
         if (team == null) {
-            leader.sendMessage("[scarlet]You have no authority.");
+            interfaceService.sendNoAuthority(leader);
             return;
         }
 
         if (teamStore.isPlayed(targetInfo)) {
-            leader.sendMessage("[scarlet]Target already serves another force.");
+            interfaceService.sendTargetAlreadyInTeam(leader);
             return;
         }
 
         teamStore.join(team.getTeamId(), targetInfo);
 
-        leader.sendMessage(Strings.format(
-            "[accent]{} has joined your command.", target.name));
-        target.sendMessage(Strings.format(
-            "[accent]You have been enlisted by <@[white]{}[]>.", leader.name));
+        interfaceService.sendJoinedYourCommand(leader, target);
+        interfaceService.sendEnlistedBy(target, leader);
     }
 
     public void requestLeaveTeam(Player player) {
@@ -91,18 +80,17 @@ public final class CataliTeamService {
         var team = teamStore.getTeamByMember(info);
 
         if (team == null) {
-            player.sendMessage("[scarlet]You are not assigned to any force.");
+            interfaceService.sendNotInTeam(player);
             return;
         }
 
         if (teamStore.getLeaders(team.getTeamId()) == info) {
-            player.sendMessage("[scarlet]A commander cannot abandon their force.");
+            interfaceService.sendLeaderCannotLeave(player);
             return;
         }
 
         teamStore.leave(info);
-
-        player.sendMessage("[accent]You have left the force.");
+        interfaceService.sendLeaveSuccess(player);
     }
 
     public void requestApproveLeave(Player leader, Player target) {
@@ -111,21 +99,19 @@ public final class CataliTeamService {
 
         var team = teamStore.getTeamByLeader(leaderInfo);
         if (team == null) {
-            leader.sendMessage("[scarlet]You have no authority.");
+            interfaceService.sendNoAuthority(leader);
             return;
         }
 
         if (!teamStore.isMember(team.getTeamId(), targetInfo)) {
-            leader.sendMessage("[scarlet]Target is not under your command.");
+            interfaceService.sendTargetNotUnderCommand(leader);
             return;
         }
 
         teamStore.leave(targetInfo);
 
-        leader.sendMessage(Strings.format(
-            "[accent]{} has been dismissed.", target.name));
-        target.sendMessage(Strings.format(
-            "[scarlet]You were dismissed by <@[white]{}[]>.", leader.name));
+        interfaceService.sendDismissedSuccess(leader, target);
+        interfaceService.sendYouWereDismissed(target, leader);
     }
 
     public void requestChangeLeader(Player leader, Player newLeader) {
@@ -134,23 +120,19 @@ public final class CataliTeamService {
 
         var team = teamStore.getTeamByLeader(leaderInfo);
         if (team == null) {
-            leader.sendMessage("[scarlet]You are not a commander.");
+            interfaceService.sendNotACommander(leader);
             return;
         }
 
         if (!teamStore.isMember(team.getTeamId(), newLeaderInfo)) {
-            leader.sendMessage("[scarlet]Target is not part of your force.");
+            interfaceService.sendTargetNotMember(leader);
             return;
         }
 
         teamStore.changeLeader(team.getTeamId(), newLeaderInfo);
 
-        leader.sendMessage(Strings.format(
-            "[accent]Command transferred to {}.", newLeader.name));
-        newLeader.sendMessage(
-            "[accent]You are now the commander.");
-
-        Call.infoToast(Strings.format(
-            "[accent]{} is now commanding a new force", newLeader.name), 4f);
+        interfaceService.sendCommandTransferred(leader, newLeader);
+        interfaceService.sendYouAreNowCommander(newLeader);
+        interfaceService.toastNewCommander(newLeader);
     }
 }
