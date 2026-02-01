@@ -17,7 +17,7 @@ import javax.inject.Singleton;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class CataliTeamService {
+public final class CataliTeamService {
 
     private final CataliTeamStore teamStore;
 

@@ -4,8 +4,6 @@ import arc.math.Mathf;
 
 import com.mdt.game.catali.enums.UnitTier;
 
-import com.mdt.game.catali.spawner.CataliBlockSpawnerConfig;
-
 import mindustry.Vars;
 
 import lombok.experimental.UtilityClass;

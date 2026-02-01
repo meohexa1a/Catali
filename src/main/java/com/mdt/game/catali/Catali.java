@@ -1,13 +1,14 @@
 package com.mdt.game.catali;
 
 import com.mdt.common.utils.CommonUtils;
-import com.mdt.game.CommonConfig;
 import com.mdt.game.catali.core.CataliTeamService;
 import com.mdt.game.catali.spawner.CataliBlockSpawner;
 import com.mdt.game.catali.spawner.CataliEnemySpawner;
 import com.mdt.mindustry.command.ClientCommand;
 import com.mdt.mindustry.command.CommandRegisterService;
 import com.mdt.mindustry.command.ConsoleCommand;
+import com.mdt.mindustry.popup.PopupProvider;
+import com.mdt.mindustry.popup.PopupRegisterService;
 import com.mdt.mindustry.utils.MindustryMap;
 import com.mdt.mindustry.utils.MindustryWorld;
 
@@ -27,11 +28,14 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public final class Catali {
     private final CommandRegisterService commandRegisterService;
+    private final PopupRegisterService popupRegisterService;
 
     private final CataliBlockSpawner blockSpawner;
     private final CataliEnemySpawner enemySpawner;
 
     private final CataliTeamService teamService;
+
+    private final CataliInterfaceService interfaceService;
 
     private boolean mapLoaded = false;
     public @Getter boolean isActive = false;
@@ -84,7 +88,7 @@ public final class Catali {
 
         commands.add(ConsoleCommand.builder()
             .prefix("catali-status")
-            .description("Show catali gamemode status")
+            .description("Show catali game mode status")
 
             .action(CommonUtils::doNothing)
             .build());
@@ -95,7 +99,8 @@ public final class Catali {
     public void start() {
         isActive = true;
 
-        commandRegisterService.registerCommands("catali", clientCommands(), consoleCommands());
+        commandRegisterService.register("catali", clientCommands(), consoleCommands());
+        popupRegisterService.register("catali", Set.of(new PopupProvider(interfaceService::popupContents)));
     }
 
     public void stop() {
@@ -103,6 +108,7 @@ public final class Catali {
         isActive = false;
 
         commandRegisterService.unregister("catali");
+        popupRegisterService.unregister("catali");
     }
 
     public void refresh() {

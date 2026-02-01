@@ -7,6 +7,6 @@ import javax.inject.Singleton;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-public class CataliEventListener {
+public final class CataliEventListener {
 
 }
