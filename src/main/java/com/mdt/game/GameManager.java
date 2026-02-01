@@ -3,6 +3,8 @@ package com.mdt.game;
 import arc.Events;
 import arc.util.Timer;
 
+import com.mdt.game.catali.Catali;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,6 +18,7 @@ import javax.inject.Singleton;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 final class GameManager {
     private final GameControl gameControl;
+    private final Catali catali;
 
     {
         Timer.schedule(this::init, 5);
@@ -24,7 +27,6 @@ final class GameManager {
 
     private void init() {
         listenEvent();
-        registerCommands();
         Timer.schedule(this::refresh, 0, 1);
     }
 
@@ -46,10 +48,8 @@ final class GameManager {
         Events.on(EventType.PlayerLeave.class, e -> {
             logEventError(() -> gameControl.listen(e));
         });
-    }
 
-    private void registerCommands() {
-
+        Events.on(EventType.TapEvent.class, e -> logEventError(() -> catali.listen(e)));
     }
 
     // !-------------------------------------------------------!
@@ -59,14 +59,6 @@ final class GameManager {
             r.run();
         } catch (Exception e) {
             log.error("Event error", e);
-        }
-    }
-
-    private void logCommandError(Runnable r) {
-        try {
-            r.run();
-        } catch (Exception e) {
-            log.error("Command error", e);
         }
     }
 }

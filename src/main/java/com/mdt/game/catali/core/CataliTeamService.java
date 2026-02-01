@@ -7,7 +7,6 @@ import com.mdt.game.catali.store.CataliTeamStore;
 
 import lombok.RequiredArgsConstructor;
 
-import mindustry.content.Fx;
 import mindustry.content.UnitTypes;
 import mindustry.game.Team;
 import mindustry.gen.Call;

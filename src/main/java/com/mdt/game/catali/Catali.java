@@ -1,15 +1,21 @@
 package com.mdt.game.catali;
 
+import com.mdt.common.utils.CommonUtils;
+import com.mdt.game.CommonConfig;
 import com.mdt.game.catali.core.CataliTeamService;
 import com.mdt.game.catali.spawner.CataliBlockSpawner;
 import com.mdt.game.catali.spawner.CataliEnemySpawner;
 import com.mdt.mindustry.command.ClientCommand;
+import com.mdt.mindustry.command.CommandRegisterService;
+import com.mdt.mindustry.command.ConsoleCommand;
 import com.mdt.mindustry.utils.MindustryMap;
 import com.mdt.mindustry.utils.MindustryWorld;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import mindustry.game.EventType;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,6 +26,8 @@ import java.util.Set;
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 public final class Catali {
+    private final CommandRegisterService commandRegisterService;
+
     private final CataliBlockSpawner blockSpawner;
     private final CataliEnemySpawner enemySpawner;
 
@@ -30,7 +38,7 @@ public final class Catali {
 
     // !-----------------------------------------------------!
 
-    public Set<ClientCommand> clientCommands() {
+    private Set<ClientCommand> clientCommands() {
         var commands = new HashSet<ClientCommand>();
 
         commands.add(ClientCommand.builder()
@@ -48,8 +56,22 @@ public final class Catali {
             .build());
 
         commands.add(ClientCommand.builder()
+            .prefix("leave").prefix("l")
+            .description("Withdraw from your current force")
+
+            .action((args, player) -> teamService.requestLeaveTeam(player))
+            .build());
+
+        commands.add(ClientCommand.builder()
             .prefix("members").prefix("m")
             .description("Show member panel")
+
+            .action((args, player) -> player.sendMessage("..."))
+            .build());
+
+        commands.add(ClientCommand.builder()
+            .prefix("upgrades").prefix("u")
+            .description("Show upgrade panel")
 
             .action((args, player) -> player.sendMessage("..."))
             .build());
@@ -57,13 +79,30 @@ public final class Catali {
         return commands;
     }
 
+    private Set<ConsoleCommand> consoleCommands() {
+        var commands = new HashSet<ConsoleCommand>();
+
+        commands.add(ConsoleCommand.builder()
+            .prefix("catali-status")
+            .description("Show catali gamemode status")
+
+            .action(CommonUtils::doNothing)
+            .build());
+
+        return commands;
+    }
+
     public void start() {
         isActive = true;
+
+        commandRegisterService.registerCommands("catali", clientCommands(), consoleCommands());
     }
 
     public void stop() {
         mapLoaded = false;
         isActive = false;
+
+        commandRegisterService.unregister("catali");
     }
 
     public void refresh() {
@@ -71,7 +110,10 @@ public final class Catali {
 
         blockSpawner.refresh();
         enemySpawner.refresh();
+    }
 
+    public void listen(EventType.TapEvent event) {
+        if (!isActive) return;
 
     }
 
