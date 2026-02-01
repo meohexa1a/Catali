@@ -5,6 +5,8 @@ import arc.util.Timer;
 
 import com.mdt.game.catali.Catali;
 
+import com.mdt.game.catali.CataliEventListener;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +20,7 @@ import javax.inject.Singleton;
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 final class GameManager {
     private final GameControl gameControl;
-    private final Catali catali;
+    private final CataliEventListener eventListener;
 
     {
         Timer.schedule(this::init, 5);
@@ -43,13 +45,12 @@ final class GameManager {
     private void listenEvent() {
         Events.on(EventType.PlayerJoin.class, e -> {
             logEventError(() -> gameControl.listen(e));
+            logEventError(() -> eventListener.listen(e));
         });
 
-        Events.on(EventType.PlayerLeave.class, e -> {
-            logEventError(() -> gameControl.listen(e));
-        });
+        Events.on(EventType.PlayerLeave.class, e -> logEventError(() -> gameControl.listen(e)));
 
-        Events.on(EventType.TapEvent.class, e -> logEventError(() -> catali.listen(e)));
+        Events.on(EventType.TapEvent.class, e -> logEventError(() -> eventListener.listen(e)));
     }
 
     // !-------------------------------------------------------!

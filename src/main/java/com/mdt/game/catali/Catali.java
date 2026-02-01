@@ -36,7 +36,6 @@ public final class Catali {
 
     // !-----------------------------------------------------!
 
-
     public void start() {
         isActive = true;
 
@@ -59,10 +58,6 @@ public final class Catali {
         enemySpawner.refresh();
     }
 
-    public void listen(EventType.TapEvent event) {
-        if (!isActive) return;
-
-    }
 
     // !----------------------------------------------------!
 

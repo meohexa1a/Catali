@@ -1,14 +1,18 @@
 package com.mdt.game.catali;
 
+import arc.util.Strings;
+
 import com.mdt.common.utils.CommonUtils;
 import com.mdt.game.catali.core.CataliTeamService;
 import com.mdt.mindustry.command.ClientCommand;
 import com.mdt.mindustry.command.ConsoleCommand;
+import com.mdt.mindustry.menu.MenuOption;
 import com.mdt.mindustry.menu.MenuService;
 import com.mdt.mindustry.popup.PopupContent;
 
 import lombok.RequiredArgsConstructor;
 
+import mindustry.gen.Call;
 import mindustry.gen.Player;
 
 import javax.inject.Inject;
@@ -89,7 +93,9 @@ public final class CataliInterfaceService {
         return commands;
     }
 
-    public List<PopupContent> popupContents(Player player) {
+    // !------------------------------------------------------!
+
+    List<PopupContent> popupContents(Player player) {
         if (!catali.get().isActive()) return List.of();
 
         var list = new ArrayList<PopupContent>();
@@ -98,6 +104,66 @@ public final class CataliInterfaceService {
     }
 
     // !------------------------------------------------------!
+
+    public void showWelcomeMenu(Player player) {
+        menuService.showMenu(player, MenuOption.builder()
+            .title("")
+            .message("")
+
+            .button("Help", CommonUtils::doNothing)
+            .button("Credit", CommonUtils::doNothing)
+            .row()
+
+            .button(common_button_close(player), CommonUtils::doNothing)
+
+            .completeContent()
+            .build());
+    }
+
+    // !------------------------------------------------------!
+
+    private String common_button_close(Player player) {
+        return "[scarlet]Close[]";
+    }
+
+    // !------------------------------------------------------!
+
+    public void sendAlreadyCommander(Player p) {
+        p.sendMessage("[scarlet]You already command a force.");
+    }
+
+    public void sendCommandCreateFailed(Player p) {
+        p.sendMessage("[scarlet]Command initialization failed.");
+    }
+
+    public void sendCommandCreated(Player p) {
+        p.sendMessage("[accent]Command established.\n" +
+            "[white]You are now leading a new force.");
+    }
+
+    public void sendNotInTeam(Player p) {
+        p.sendMessage("[scarlet]You are not assigned to any force.");
+    }
+
+    public void sendLeaderCannotLeave(Player p) {
+        p.sendMessage("[scarlet]A commander cannot abandon their force.");
+    }
+
+    public void sendLeaveSuccess(Player p) {
+        p.sendMessage("[accent]You have left the force.");
+    }
+
+    // !-----------------!
+
+    public void toastCommanderEntered(Player commander) {
+        Call.infoToast(Strings.format(
+            "[accent]Commander <@[white]{}[]> has entered Catali.io", commander.name), 5f);
+    }
+
+    public void toastTeamDisbanded(Player commander) {
+        Call.infoToast(Strings.format(
+            "[scarlet]Commander <@[white]{}[]> disbanded their force", commander.name), 5f);
+    }
 
 
 }

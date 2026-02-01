@@ -3,6 +3,7 @@ package com.mdt.game.catali.core;
 import arc.math.geom.Vec2;
 import arc.util.Strings;
 
+import com.mdt.game.catali.CataliInterfaceService;
 import com.mdt.game.catali.store.CataliTeamStore;
 
 import lombok.RequiredArgsConstructor;
@@ -21,19 +22,21 @@ public final class CataliTeamService {
 
     private final CataliTeamStore teamStore;
 
+    private final CataliInterfaceService interfaceService;
+
     // !-------------------------------------------------------------!
 
     public void requestToPlaying(Player player, Vec2 position) {
         var info = player.getInfo();
 
         if (teamStore.isPlayed(info)) {
-            player.sendMessage("[scarlet]You already command a force.");
+            interfaceService.sendAlreadyCommander(player);
             return;
         }
 
         int teamId = teamStore.getNextTeamId();
         if (!teamStore.createTeam(teamId, info)) {
-            player.sendMessage("[scarlet]Command initialization failed.");
+            interfaceService.sendCommandCreateFailed(player);
             return;
         }
 
@@ -41,12 +44,8 @@ public final class CataliTeamService {
 
         UnitTypes.mega.spawn(position, team);
 
-        Call.infoToast(Strings.format(
-            "[accent]Commander <@[white]{}[]> has entered Catali.io", player.name), 5f);
-
-        player.sendMessage(
-            "[accent]Command established.\n" +
-                "[white]You are now leading a new force.");
+        interfaceService.toastCommanderEntered(player);
+        interfaceService.sendCommandCreated(player);
     }
 
     public void requestDisbandTeam(Player leader) {
