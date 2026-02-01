@@ -3,8 +3,6 @@ package com.mdt.game;
 import arc.Events;
 import arc.util.Timer;
 
-import com.mdt.game.catali.Catali;
-
 import com.mdt.game.catali.CataliEventListener;
 
 import lombok.RequiredArgsConstructor;
@@ -18,16 +16,11 @@ import javax.inject.Singleton;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor_ = @Inject)
-final class GameManager {
+public final class GameManager {
     private final GameControl gameControl;
     private final CataliEventListener eventListener;
 
-    {
-        Timer.schedule(this::init, 5);
-        log.info("Catali.io start after 5 seconds...");
-    }
-
-    private void init() {
+    public void init() {
         listenEvent();
         Timer.schedule(this::refresh, 0, 1);
     }
