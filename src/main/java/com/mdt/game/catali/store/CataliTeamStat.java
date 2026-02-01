@@ -16,5 +16,4 @@ public class CataliTeamStat {
     private int gachaPoint = 0;
     private int unitTier = UnitTier.Tier1.ordinal();
     private int respawnSlot = CataliTeamUnitConfig.RESPAWN_START_SLOT;
-
 }

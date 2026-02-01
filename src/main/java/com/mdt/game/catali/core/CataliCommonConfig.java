@@ -10,8 +10,8 @@ import static mindustry.content.UnitTypes.*;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class CataliGeneralConfig {
-    public static final float LEVEL_UP_EXP_REQ_MULTIPLIER = 0.025f;
+public class CataliCommonConfig {
+    public static final float EXP_REQ_MULTIPLIER = 0.025f;
     public static final int BEGINNER_LEVEL_LEAST_THAN = 30;
     public static final int BEGINNER_EXP_MULTIPLIER = 4;
 
