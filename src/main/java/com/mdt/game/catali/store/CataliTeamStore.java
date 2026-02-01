@@ -23,6 +23,7 @@ public class CataliTeamStore {
     @Locked
     public boolean createTeam(int teamId, Administration.PlayerInfo leader) {
         if (teams.containsKey(teamId)) return false;
+        if (playerTeamIndex.containsKey(leader)) return false;
 
         teams.put(teamId, new CataliTeamStat(teamId));
 
@@ -33,6 +34,7 @@ public class CataliTeamStore {
         return true;
     }
 
+    @Locked
     public boolean removeTeam(int teamId) {
         if (!teams.containsKey(teamId)) return false;
 
@@ -40,102 +42,87 @@ public class CataliTeamStore {
 
         teamLeaders.remove(teamId);
         var members = teamMembers.remove(teamId);
-        if (members != null) members.forEach(playerTeamIndex::remove);
+        members.forEach(playerTeamIndex::remove);
 
         return true;
     }
 
+    @Locked
     public boolean changeLeader(int teamId, Administration.PlayerInfo newLeader) {
         if (!teams.containsKey(teamId)) return false;
         if (!isMember(teamId, newLeader)) return false;
 
         teamLeaders.put(teamId, newLeader);
+
         return true;
     }
 
+    @Locked
     public boolean join(int teamId, Administration.PlayerInfo player) {
         if (!teams.containsKey(teamId)) return false;
+        if (playerTeamIndex.containsKey(player)) return false;
 
-        // Kiểm tra xem player đã ở trong team nào khác chưa?
-        if (playerTeamIndex.containsKey(player)) {
-            return false; // Phải rời team cũ trước khi vào team mới
-        }
-
-        teamMembers.computeIfAbsent(teamId, k -> new HashSet<>()).add(player);
+        teamMembers.get(teamId).add(player);
         playerTeamIndex.put(player, teamId);
+
         return true;
     }
 
+    @Locked
     public boolean leave(Administration.PlayerInfo player) {
-        Integer teamId = playerTeamIndex.get(player);
+        var teamId = playerTeamIndex.get(player);
         if (teamId == null) return false;
+        if (teamLeaders.get(teamId) == player) return false;
 
-        // Xóa khỏi danh sách thành viên
-        Set<Administration.PlayerInfo> members = teamMembers.get(teamId);
-        if (members != null) {
-            members.remove(player);
-        }
-
-        // Xóa khỏi chỉ mục tra cứu
+        teamMembers.get(teamId).remove(player);
         playerTeamIndex.remove(player);
 
-        // Logic phụ: Nếu Leader rời team thì sao?
-        // Option A: Xóa team -> gọi removeTeam(teamId)
-        // Option B: Chuyển leader cho người khác -> xử lý thêm logic
-        // Ở đây mình để đơn giản là xóa leader khỏi map leader nếu họ rời.
-        if (teamLeaders.get(teamId) == player) {
-            teamLeaders.remove(teamId);
-            // Cần logic xử lý team không có leader ở đây (ví dụ disband team)
-        }
-
         return true;
     }
 
-    // --- Các hàm Getter & Helper ---
+    // !-------------------------------------------------!
 
+    @Locked
     public CataliTeamStat getTeam(int teamId) {
         return teams.get(teamId);
     }
 
+    @Locked
     public CataliTeamStat getTeamByLeader(Administration.PlayerInfo leader) {
-        Integer teamId = playerTeamIndex.get(leader);
-        // Kiểm tra xem teamId có tồn tại VÀ người này có phải leader không
-        if (teamId != null && teamLeaders.get(teamId) == leader) {
-            return teams.get(teamId);
-        }
-        return null;
+        var teamId = playerTeamIndex.get(leader);
+        if (teamId == null || teamLeaders.get(teamId) != leader) return null;
+        else return teams.get(teamId);
     }
 
+    @Locked
     public CataliTeamStat getTeamByMember(Administration.PlayerInfo player) {
-        Integer teamId = playerTeamIndex.get(player);
-        return (teamId != null) ? teams.get(teamId) : null;
+        var teamId = playerTeamIndex.get(player);
+        return teamId != null ? teams.get(teamId) : null;
     }
 
+    @Locked
     public Administration.PlayerInfo getLeaders(int teamId) {
         return teamLeaders.get(teamId);
     }
 
+    @Locked
     public Set<Administration.PlayerInfo> getMembers(int teamId) {
-        // Trả về Unmodifiable Set để tránh việc code bên ngoài sửa trực tiếp vào Map
-        Set<Administration.PlayerInfo> members = teamMembers.get(teamId);
-        return members != null ? Collections.unmodifiableSet(members) : Collections.emptySet();
+        var members = teamMembers.get(teamId);
+        return members != null ? Set.copyOf(members) : Set.of();
     }
 
-    public Administration.PlayerInfo getFirstMember(int teamId) {
-        Set<Administration.PlayerInfo> members = teamMembers.get(teamId);
-        if (members == null || members.isEmpty()) return null;
-        return members.iterator().next();
-    }
-
-    public Integer hasTeam(Administration.PlayerInfo player) {
+    @Locked
+    public Integer getTeamId(Administration.PlayerInfo player) {
         return playerTeamIndex.get(player);
     }
 
+    @Locked
     public boolean exists(int teamId) {
         return teams.containsKey(teamId);
     }
 
-    private boolean isMember(int teamId, Administration.PlayerInfo player) {
+    @Locked
+    public boolean isMember(int teamId, Administration.PlayerInfo player) {
         var members = teamMembers.get(teamId);
         return members != null && members.contains(player);
     }
