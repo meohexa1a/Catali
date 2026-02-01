@@ -13,7 +13,6 @@ import lombok.experimental.UtilityClass;
 public class CataliCommonConfig {
     public static final float EXP_REQ_MULTIPLIER = 0.025f;
     public static final int BEGINNER_LEVEL_LEAST_THAN = 30;
-    public static final int BEGINNER_EXP_MULTIPLIER = 4;
 
     public static final int EXP_FROM_IDLE_UNIT = 100;
     public static final List<UnitType> IDLE_UNITS = List.of(oct, quell, disrupt);

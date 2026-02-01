@@ -1,5 +1,6 @@
 package com.mdt.game.catali;
 
+import arc.math.geom.Vec2;
 import arc.util.Strings;
 
 import com.mdt.common.utils.CommonUtils;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import mindustry.gen.Call;
 import mindustry.gen.Player;
+import mindustry.world.Tile;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -28,7 +30,7 @@ import java.util.Set;
 public final class CataliInterfaceService {
     private final MenuService menuService;
 
-    private final CataliTeamService teamService;
+    private final Provider<CataliTeamService> teamService;
 
     private final Provider<Catali> catali;
 
@@ -43,7 +45,7 @@ public final class CataliInterfaceService {
 
             .action((args, player) -> {
                 if (!catali.get().isActive()) return;
-                teamService.requestLeaveTeam(player);
+                teamService.get().requestLeaveTeam(player);
             })
             .build());
 
@@ -53,7 +55,7 @@ public final class CataliInterfaceService {
 
             .action((args, player) -> {
                 if (!catali.get().isActive()) return;
-                teamService.requestDisbandTeam(player);
+                teamService.get().requestDisbandTeam(player);
             })
             .build());
 
@@ -156,6 +158,35 @@ public final class CataliInterfaceService {
 
     // !------------------------------------------------------!
 
+    public void showDeployMenu(Player player, Tile tile) {
+        if (tile == null) return;
+
+        menuService.showMenu(player, MenuOption.builder()
+            .title("[accent]DEPLOYMENT ORDER")
+
+            .message(Strings.format("""
+                [white]Target Coordinates:
+                [orange]X: @ | Y: @[]
+
+                [lightgray]Initiating command protocol at this location.
+                Your Commander Unit will be air-dropped immediately.
+
+                [gray]Confirm deployment authorization?""", tile.x, tile.y))
+
+            .button("[green]INITIATE DEPLOYMENT", (p) ->
+                teamService.get().requestToPlaying(p, new Vec2(tile.worldx(), tile.worldy())))
+            .row()
+
+            .button(common_button_close(player), CommonUtils::doNothing)
+            .row()
+
+            .completeContent()
+            .build()
+        );
+    }
+
+    // !------------------------------------------------------!
+
     private String common_button_close(Player player) {
         return "[scarlet]Close[]";
     }
@@ -211,25 +242,25 @@ public final class CataliInterfaceService {
     }
 
     public void sendJoinedYourCommand(Player leader, Player target) {
-        leader.sendMessage(Strings.format("[accent]{} has joined your command.", target.name));
+        leader.sendMessage(Strings.format("[accent]@ has joined your command.", target.name));
     }
 
     public void sendDismissedSuccess(Player leader, Player target) {
-        leader.sendMessage(Strings.format("[accent]{} has been dismissed.", target.name));
+        leader.sendMessage(Strings.format("[accent]@ has been dismissed.", target.name));
     }
 
     public void sendCommandTransferred(Player leader, Player newLeader) {
-        leader.sendMessage(Strings.format("[accent]Command transferred to {}.", newLeader.name));
+        leader.sendMessage(Strings.format("[accent]Command transferred to @.", newLeader.name));
     }
 
     // --- Messages to Target/Member ---
 
     public void sendEnlistedBy(Player target, Player leader) {
-        target.sendMessage(Strings.format("[accent]You have been enlisted by <@[white]{}[]>.", leader.name));
+        target.sendMessage(Strings.format("[accent]You have been enlisted by <@[white]>.", leader.name));
     }
 
     public void sendYouWereDismissed(Player target, Player leader) {
-        target.sendMessage(Strings.format("[scarlet]You were dismissed by <@[white]{}[]>.", leader.name));
+        target.sendMessage(Strings.format("[scarlet]You were dismissed by <@[white]>.", leader.name));
     }
 
     public void sendYouAreNowCommander(Player newLeader) {
@@ -240,16 +271,28 @@ public final class CataliInterfaceService {
 
     public void toastCommanderEntered(Player commander) {
         Call.infoToast(Strings.format(
-            "[accent]Commander <@[white]{}[]> has entered Catali.io", commander.name), 5f);
+            "[accent]Commander <@[white]> has entered Catali.io", commander.name), 5f);
     }
 
     public void toastTeamDisbanded(Player leader) {
         Call.infoToast(Strings.format(
-            "[scarlet]Commander <@[white]{}[]> disbanded their force", leader.name), 5f);
+            "[scarlet]Commander <@[white]> disbanded their force", leader.name), 5f);
     }
 
     public void toastNewCommander(Player newLeader) {
         Call.infoToast(Strings.format(
-            "[accent]{} is now commanding a new force", newLeader.name), 4f);
+            "[accent]@ is now commanding a new force", newLeader.name), 4f);
+    }
+
+    // --- RPG ---
+
+    public void sendLevelUpMessage(Player commander, int newLevel) {
+        commander.sendMessage(Strings.format(
+            "[gold]PROMOTION![]\n[white]You have reached Level [accent]{}[].\nUse command [lightgray]/upgrades[] to improve your forces.", newLevel));
+    }
+
+    public void toastLevelUp(Player commander, int newLevel) {
+        Call.infoToast(Strings.format(
+            "[accent]ALERT[]: Commander <@[white]> promoted to [gold]Level {}[]", commander.name, newLevel), 5f);
     }
 }

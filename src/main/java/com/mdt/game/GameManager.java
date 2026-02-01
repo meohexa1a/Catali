@@ -51,6 +51,12 @@ final class GameManager {
         Events.on(EventType.PlayerLeave.class, e -> logEventError(() -> gameControl.listen(e)));
 
         Events.on(EventType.TapEvent.class, e -> logEventError(() -> eventListener.listen(e)));
+
+        Events.on(EventType.BuildingBulletDestroyEvent.class, e -> logEventError(() -> eventListener.listen(e)));
+
+        Events.on(EventType.UnitBulletDestroyEvent.class, e -> logEventError(() -> eventListener.listen(e)));
+
+        Events.on(EventType.UnitDestroyEvent.class, e -> logEventError(() -> eventListener.listen(e)));
     }
 
     // !-------------------------------------------------------!
